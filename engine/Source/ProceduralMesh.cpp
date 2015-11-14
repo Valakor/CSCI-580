@@ -1,50 +1,25 @@
 //
-//  ProceduralMeshComponent.cpp
+//  ProceduralMesh.cpp
 //  Game-windows
 //
 //  Created by Matthew Pohlmann on 11/14/15.
 //  Copyright (c) 2015 Sanjay Madhav. All rights reserved.
 //
 
-#include "ProceduralMeshComponent.h"
-#include "Actor.h"
+#include "ProceduralMesh.h"
 #include "Renderer.h"
+#include "Game.h"
 
-IMPL_COMPONENT(ProceduralMeshComponent, MeshComponent);
 
-ProceduralMeshComponent::ProceduralMeshComponent(Actor& owner) : Super(owner)
+void MeshGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>& indices, std::vector<TexturePtr>& textures, float& radius)
 {
-    
-}
+	radius = 1.0f;
 
-void ProceduralMeshComponent::Draw(class Renderer& render)
-{
-	MeshPtr mesh = GetMesh();
-    if (mesh)
-    {
-		render.DrawBasicMesh(mesh->GetVertexArray(), mesh->GetTexture(0), mOwner.GetWorldTransform());
-    }
-}
-
-void ProceduralMeshComponent::Generate()
-{
-	std::vector<Vertex> verts;
-	std::vector<GLuint> indices;
-
-	GenerateMesh(verts, indices);
-
-	VertexArrayPtr vertexArray = VertexArray::Create(verts.data(), verts.size(), indices.data(), indices.size());
-	MeshPtr newMesh = std::make_shared<Mesh>(vertexArray, std::vector<TexturePtr>(), 1.0f);
-	SetMesh(newMesh);
-}
-
-void ProceduralMeshComponent::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>& indices)
-{
 	verts.emplace_back(Vector3(1.f, 0.f, 0.f), Vector3(1.f, 0.f, 0.f), Vector2(0.f, 0.f));
 	verts.emplace_back(Vector3(-1.f, 0.f, 0.f), Vector3(-1.f, 0.f, 0.f), Vector2(0.f, 0.f));
 	verts.emplace_back(Vector3(0.f, 1.f, 0.f), Vector3(0.f, 1.f, 0.f), Vector2(0.f, 0.f));
 	verts.emplace_back(Vector3(0.f, -1.f, 0.f), Vector3(0.f, -1.f, 0.f), Vector2(0.f, 0.f));
-	
+
 	verts.emplace_back(Vector3(0.f, 0.f, 1.f), Vector3(0.f, 0.f, 1.f), Vector2(0.f, 0.f));
 	verts.emplace_back(Vector3(0.f, 0.f, -1.f), Vector3(0.f, 0.f, -1.f), Vector2(0.f, 0.f));
 
@@ -55,7 +30,7 @@ void ProceduralMeshComponent::GenerateMesh(std::vector<Vertex>& verts, std::vect
 	indices.push_back(3);
 	indices.push_back(4);
 	indices.push_back(1);
-	
+
 	indices.push_back(1);
 	indices.push_back(4);
 	indices.push_back(2);
@@ -80,3 +55,21 @@ void ProceduralMeshComponent::GenerateMesh(std::vector<Vertex>& verts, std::vect
 	indices.push_back(5);
 	indices.push_back(0);
 }
+
+bool ProceduralMesh::Generate()
+{
+	std::vector<Vertex> verts;
+	std::vector<GLuint> indices;
+
+	mGenerator.GenerateMesh(verts, indices, mTextures, mRadius);
+
+	if (mTextures.size() == 0)
+	{
+		mTextures.push_back(Game::Get().GetAssetCache().Load<Texture>("Textures/Default.png"));
+	}
+
+	mVertexArray = VertexArray::Create(verts.data(), verts.size(), indices.data(), indices.size());
+
+	return true;
+}
+

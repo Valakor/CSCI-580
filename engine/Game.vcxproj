@@ -38,7 +38,7 @@
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\ObjectMacros.h" />
     <ClInclude Include="Source\PhysWorld.h" />
-    <ClInclude Include="Source\ProceduralMeshComponent.h" />
+    <ClInclude Include="Source\ProceduralMesh.h" />
     <ClInclude Include="Source\Random.h" />
     <ClInclude Include="Source\Renderer.h" />
     <ClInclude Include="Source\Shader.h" />
@@ -77,7 +77,7 @@
     <ClCompile Include="Source\MoveComponent.cpp" />
     <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\PhysWorld.cpp" />
-    <ClCompile Include="Source\ProceduralMeshComponent.cpp" />
+    <ClCompile Include="Source\ProceduralMesh.cpp" />
     <ClCompile Include="Source\Random.cpp" />
     <ClCompile Include="Source\Renderer.cpp" />
     <ClCompile Include="Source\Shader.cpp" />

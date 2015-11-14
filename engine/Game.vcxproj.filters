@@ -125,7 +125,7 @@
     <ClInclude Include="Source\Checkpoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ProceduralMeshComponent.h">
+    <ClInclude Include="Source\ProceduralMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -238,7 +238,7 @@
     <ClCompile Include="Source\Checkpoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ProceduralMeshComponent.cpp">
+    <ClCompile Include="Source\ProceduralMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

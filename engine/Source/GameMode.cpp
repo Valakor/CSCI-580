@@ -11,7 +11,8 @@
 #include "Asteroid.h"
 #include "Random.h"
 #include "Checkpoint.h"
-#include "ProceduralMeshComponent.h"
+#include "MeshComponent.h"
+#include "ProceduralMesh.h"
 #include <cfloat>
 
 IMPL_ACTOR(GameMode, Actor);
@@ -53,8 +54,9 @@ void GameMode::BeginPlay()
 	for (int i = 0; i < 4; ++i)
 	{
 		auto actor = Actor::Spawn(mGame);
-		auto procComp = ProceduralMeshComponent::Create(*(actor.get()));
-		procComp->Generate();
+		auto meshComp = MeshComponent::Create(*(actor.get()));
+		auto procMesh = ProceduralMesh::StaticCreate(MeshGenerator());
+		meshComp->SetMesh(procMesh);
 		actor->SetScale(20.f);
 		actors.push_back(actor);
 	}

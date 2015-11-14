@@ -9,7 +9,6 @@ class Mesh : public Asset
 	DECL_ASSET(Mesh, Asset);
 public:
 	Mesh();
-	Mesh(VertexArrayPtr vertexArray, const std::vector<TexturePtr>& textures, float radius);
 	virtual ~Mesh();
 
 	bool Load(const char* fileName, class AssetCache* cache) override;
@@ -18,7 +17,7 @@ public:
 	TexturePtr GetTexture(size_t index);
 
 	float GetRadius() const { return mRadius; }
-private:
+protected:
 	VertexArrayPtr mVertexArray;
 	std::vector<TexturePtr> mTextures;
 	float mRadius;
