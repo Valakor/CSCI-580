@@ -21,11 +21,13 @@ struct Vertex
 
 	Vertex(float x, float y, float z, float u, float v)
 		:mPos(x, y, z)
+		,mNormal(0.f, 0.f, 0.f)
 		,mTexCoord(u,v)
 	{}
 
 	Vertex(const Vector3& pos, const Vector2& texcoord)
 		:mPos(pos)
+		,mNormal(0.f, 0.f, 0.f)
 		,mTexCoord(texcoord)
 	{}
 

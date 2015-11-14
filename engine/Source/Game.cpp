@@ -5,12 +5,15 @@
 #include "Texture.h"
 #include "Random.h"
 
+Game* Game::sInstance = nullptr;
+
 Game::Game()
 	:mRenderer(*this)
 	,mAssetCache(*this, "Assets/")
 	,mShouldQuit(false)
 {
-
+	_ASSERT(!Game::sInstance);
+	Game::sInstance = this;
 }
 
 Game::~Game()
@@ -22,6 +25,9 @@ Game::~Game()
     Mix_CloseAudio();
 	TTF_Quit();
 	SDL_Quit();
+
+	_ASSERT(Game::sInstance);
+	Game::sInstance = nullptr;
 }
 
 bool Game::Init()

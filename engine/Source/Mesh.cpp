@@ -4,11 +4,23 @@
 #include <rapidjson/document.h>
 #include <SDL/SDL_log.h>
 #include "AssetCache.h"
+#include "Game.h"
 
 Mesh::Mesh()
 	:mRadius(0.0f)
 {
 
+}
+
+Mesh::Mesh(VertexArrayPtr vertexArray, const std::vector<TexturePtr>& textures, float radius)
+	: mVertexArray(vertexArray)
+	, mTextures(textures)
+	, mRadius(radius)
+{
+	if (mTextures.size() == 0)
+	{
+		mTextures.push_back(Game::Get().GetAssetCache().Load<Texture>("Textures/Default.png"));
+	}
 }
 
 Mesh::~Mesh()

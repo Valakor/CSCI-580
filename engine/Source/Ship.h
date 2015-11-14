@@ -33,7 +33,6 @@ public:
     Ship(class Game& game);
     
     virtual void BeginPlay() override;
-	virtual void BeginTouch( Actor& other ) override;
     virtual void Tick(float deltaTime) override;
 
 	void Recenter();

@@ -57,19 +57,6 @@ void Ship::BeginPlay()
     mInput->BindLinearAxis("Move");
 }
 
-void Ship::BeginTouch( Actor& other )
-{
-	Super::BeginTouch( other );
-
-	if ( IsA<Checkpoint>( other ) )
-	{
-		if ( mGame.GetGameMode()->CheckpointReached() )
-		{
-			other.SetIsAlive( false );
-		}
-	}
-}
-
 void Ship::Tick(float deltaTime)
 {
     Super::Tick(deltaTime);

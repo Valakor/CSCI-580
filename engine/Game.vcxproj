@@ -12,7 +12,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Actor.h" />
-    <ClInclude Include="Source\Arrow.h" />
     <ClInclude Include="Source\Asset.h" />
     <ClInclude Include="Source\AssetCache.h" />
     <ClInclude Include="Source\Asteroid.h" />
@@ -39,6 +38,7 @@
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\ObjectMacros.h" />
     <ClInclude Include="Source\PhysWorld.h" />
+    <ClInclude Include="Source\ProceduralMeshComponent.h" />
     <ClInclude Include="Source\Random.h" />
     <ClInclude Include="Source\Renderer.h" />
     <ClInclude Include="Source\Shader.h" />
@@ -52,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Actor.cpp" />
-    <ClCompile Include="Source\Arrow.cpp" />
     <ClCompile Include="Source\Asset.cpp" />
     <ClCompile Include="Source\AssetCache.cpp" />
     <ClCompile Include="Source\Asteroid.cpp" />
@@ -78,6 +77,7 @@
     <ClCompile Include="Source\MoveComponent.cpp" />
     <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\PhysWorld.cpp" />
+    <ClCompile Include="Source\ProceduralMeshComponent.cpp" />
     <ClCompile Include="Source\Random.cpp" />
     <ClCompile Include="Source\Renderer.cpp" />
     <ClCompile Include="Source\Shader.cpp" />

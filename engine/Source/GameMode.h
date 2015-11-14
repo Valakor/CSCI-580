@@ -11,7 +11,6 @@
 #include "AudioComponent.h"
 #include "HUD.h"
 #include "Ship.h"
-#include "Arrow.h"
 #include "GameTimers.h"
 
 class GameMode : public Actor
@@ -23,11 +22,8 @@ public:
     virtual void BeginPlay() override;
 	virtual void Tick( float deltaTime ) override;
 
-	bool CheckpointReached();
-    
 private:
 
-	void SpawnRandomCheckpoint();
 	void GameOver();
     
     AudioComponentPtr mAudio;
@@ -36,7 +32,6 @@ private:
     HUDPtr mHud;
 
 	ShipPtr mShip;
-	ArrowPtr mArrow;
 
 	TimerHandle mGameTimer;
 

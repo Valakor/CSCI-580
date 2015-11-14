@@ -43,7 +43,7 @@ void HUD::BeginPlay()
     
     mTextStatus = FontComponent::Create(*this);
     mTextStatus->SetFont(font);
-    mTextStatus->SetText("STATUS MESSAGE", Color::Red, 56);
+    mTextStatus->SetText("", Color::Red, 56);
     mTextStatus->SetAlignment(FontComponent::AlignCenter);
 }
 
