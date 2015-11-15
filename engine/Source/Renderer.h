@@ -32,6 +32,7 @@ public:
 	void DrawVertexArray(VertexArrayPtr vertArray);
 
 	void UpdateViewMatrix( const Matrix4& newMatrix );
+	void UpdateViewPos(Vector3& newPos);
 
 	Vector3 Unproject( const Vector3& screenPoint ) const;
 
@@ -64,6 +65,8 @@ private:
     
 	Matrix4 mView;
 	Matrix4 mProj;
+
+	Vector3 mCameraPos;
 
     ShaderPtr mBasicMeshShader;
 };

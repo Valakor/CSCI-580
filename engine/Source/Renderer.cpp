@@ -138,8 +138,15 @@ void Renderer::DrawBasicMesh(VertexArrayPtr vertArray, TexturePtr texture, const
 {
     mBasicMeshShader->SetActive();
     mBasicMeshShader->BindWorldTransform(worldTransform);
+	mBasicMeshShader->BindLightPosition(Vector3());
+	mBasicMeshShader->BindLightColor(Vector3(0.5, 0.5, 0.5));
     mBasicMeshShader->UploadUniformsToGPU();
     
+	mBasicMeshShader->BindAmbientColor(Vector3(0.1, 0.1, 0.1));
+	mBasicMeshShader->BindEmissiveColor(Vector3(0, 0, 0));
+	mBasicMeshShader->BindDiffuseColor(Vector3(1, 1, 1));
+	mBasicMeshShader->BindSpecularColor(Vector3(1, 1, 1));
+	mBasicMeshShader->BindSpecPower(16.0f);
     mBasicMeshShader->BindTexture("uTexture", texture, 0);
     
     DrawVertexArray(vertArray);
@@ -155,6 +162,11 @@ void Renderer::UpdateViewMatrix( const Matrix4& newMatrix )
 {
 	mView = newMatrix;
 	mBasicMeshShader->BindViewProjection( mView * mProj );
+}
+
+void Renderer::UpdateViewPos(Vector3& newPos)
+{
+	mBasicMeshShader->BindCameraPosition(newPos);
 }
 
 Vector3 Renderer::Unproject( const Vector3& screenPoint ) const

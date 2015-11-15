@@ -21,6 +21,16 @@ public:
 	void BindViewProjection( const Matrix4& viewProj );
 	void BindWorldTransform( const Matrix4& worldTransform );
 
+	void BindCameraPosition(Vector3& pos) { cameraPos = pos; }
+	void BindLightColor(Vector3& color) { lightColor = color; }
+	void BindLightPosition(Vector3& pos) { lightPos = pos; }
+
+	void BindAmbientColor(Vector3& ambient);
+	void BindEmissiveColor(Vector3& emissive);
+	void BindDiffuseColor(Vector3& diffuse);
+	void BindSpecularColor(Vector3& specular);
+	void BindSpecPower(float power);
+
 	void UploadUniformsToGPU();
 
 	// Bind the specified texture to the specified unit
@@ -38,6 +48,9 @@ private:
 	};
 
 	MatrixBlock mMatrixBlock;
+	Vector3 cameraPos;
+	Vector3 lightColor;
+	Vector3 lightPos;
 
 	GLuint mVertexShader;
 	GLuint mFragmentShader;

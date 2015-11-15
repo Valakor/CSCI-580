@@ -33,6 +33,36 @@ void Shader::BindWorldTransform( const Matrix4& worldTransform )
 	mMatrixBlock.mWorldTransform = worldTransform;
 }
 
+void Shader::BindAmbientColor(Vector3& ambient)
+{
+	GLuint ambientLoc = glGetUniformLocation(mShaderProgram, "Ambient");
+	glUniform4f(ambientLoc, ambient.x, ambient.y, ambient.z, 1.0f);
+}
+
+void Shader::BindEmissiveColor(Vector3& emissive)
+{
+	GLuint emissiveLoc = glGetUniformLocation(mShaderProgram, "MaterialEmissive");
+	glUniform4f(emissiveLoc, emissive.x, emissive.y, emissive.z, 1.0f);
+}
+
+void Shader::BindDiffuseColor(Vector3& diffuse)
+{
+	GLuint diffuseLoc = glGetUniformLocation(mShaderProgram, "MaterialDiffuse");
+	glUniform4f(diffuseLoc, diffuse.x, diffuse.y, diffuse.z, 1.0f);
+}
+
+void Shader::BindSpecularColor(Vector3& specular)
+{
+	GLuint specLoc = glGetUniformLocation(mShaderProgram, "MaterialSpecular");
+	glUniform4f(specLoc, specular.x, specular.y, specular.z, 1.0f);
+}
+
+void Shader::BindSpecPower(float power)
+{
+	GLuint specPower = glGetUniformLocation(mShaderProgram, "MaterialShininess");
+	glUniform1f(specPower, power);
+}
+
 void Shader::UploadUniformsToGPU()
 {
 	//// Bind this buffer to index 0
@@ -49,6 +79,13 @@ void Shader::UploadUniformsToGPU()
 	glUniformMatrix4fv( view, 1, GL_FALSE, mMatrixBlock.mViewProj.GetAsFloatPtr() );
 	GLuint world = glGetUniformLocation( mShaderProgram, "uWorldTransform" );
 	glUniformMatrix4fv( world, 1, GL_FALSE, mMatrixBlock.mWorldTransform.GetAsFloatPtr() );
+	
+	GLuint camera = glGetUniformLocation(mShaderProgram, "EyePosW");
+	glUniform4f(camera, cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
+	GLuint light = glGetUniformLocation(mShaderProgram, "LightPosW");
+	glUniform4f(light, lightPos.x, lightPos.y, lightPos.z, 1.0f);
+	GLuint lightC = glGetUniformLocation(mShaderProgram, "LightColor");
+	glUniform4f(lightC, lightColor.x, lightColor.y, lightColor.z, 1.0f);
 }
 
 void Shader::BindTexture( const char* param, TexturePtr texture, int unit )
