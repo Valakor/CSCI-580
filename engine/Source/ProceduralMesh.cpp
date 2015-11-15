@@ -58,10 +58,15 @@ void MeshGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>
 
 bool ProceduralMesh::Generate()
 {
+	if (!mGenerator)
+	{
+		return false;
+	}
+
 	std::vector<Vertex> verts;
 	std::vector<GLuint> indices;
 
-	mGenerator.GenerateMesh(verts, indices, mTextures, mRadius);
+	mGenerator->GenerateMesh(verts, indices, mTextures, mRadius);
 
 	if (mTextures.size() == 0)
 	{

@@ -17,7 +17,7 @@
 			return std::static_pointer_cast<d>(shared_from_this()); \
 		} \
 	public: \
-		static std::shared_ptr<d> StaticCreate(MeshGenerator& generator) \
+		static std::shared_ptr<d> StaticCreate(MeshGeneratorPtr generator) \
 		{ \
 			std::shared_ptr<d> ptr = std::make_shared<d>(generator); \
 			if (!ptr->Generate()) { return nullptr; } \
@@ -29,8 +29,10 @@
 
 struct MeshGenerator
 {
+	virtual ~MeshGenerator() { }
 	virtual void GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>& indices, std::vector<TexturePtr>& textures, float& radius);
 };
+DECL_PTR(MeshGenerator);
 
 
 class ProceduralMesh : public Mesh
@@ -40,15 +42,15 @@ class ProceduralMesh : public Mesh
 
 public:
     
-	ProceduralMesh(MeshGenerator& generator) : mGenerator(generator) { }
+	ProceduralMesh(MeshGeneratorPtr generator) : mGenerator(generator) { }
 	virtual ~ProceduralMesh() { }
 
 	bool Generate();
-	MeshGenerator& GetGenerator() { return mGenerator; }
+	MeshGeneratorPtr GetGenerator() { return mGenerator; }
 
 private:
 
-	MeshGenerator mGenerator;
+	MeshGeneratorPtr mGenerator;
     
 };
 

@@ -129,6 +129,7 @@ void Game::AddInputMappings()
 {
     mInput.AddActionMapping("Quit", SDLK_ESCAPE);
 	mInput.AddActionMapping("Recenter", 'r');
+	mInput.AddActionMapping("Regenerate", 'f');
     
     mInput.AddAxisMapping("Move", 'p', SDLK_SEMICOLON);
     mInput.AddAxisMapping("Yaw", 'd', 'a');

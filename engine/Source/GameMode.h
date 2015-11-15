@@ -25,6 +25,9 @@ public:
 private:
 
 	void GameOver();
+
+	std::vector<ActorPtr> mProceduralActors;
+	void RegenerateWorld();
     
     AudioComponentPtr mAudio;
     SoundPtr mCheckpointReachedSound;

@@ -13,6 +13,7 @@
 #include "Checkpoint.h"
 #include "MeshComponent.h"
 #include "ProceduralMesh.h"
+#include "IcoGenerator.h"
 #include <cfloat>
 
 IMPL_ACTOR(GameMode, Actor);
@@ -48,22 +49,9 @@ void GameMode::BeginPlay()
 	// Spawn ship
 	mShip = Ship::Spawn( mGame );
 
-	// TESTING
 	// Spawn a couple procedural mesh actors
-	std::vector<ActorPtr> actors;
-	for (int i = 0; i < 4; ++i)
-	{
-		auto actor = Actor::Spawn(mGame);
-		auto meshComp = MeshComponent::Create(*(actor.get()));
-		auto procMesh = ProceduralMesh::StaticCreate(MeshGenerator());
-		meshComp->SetMesh(procMesh);
-		actor->SetScale(20.f);
-		actors.push_back(actor);
-	}
-	actors[0]->SetPosition(Vector3(150.f, 0.f, 0.f));
-	actors[1]->SetPosition(Vector3(-150.f, 0.f, 0.f));
-	actors[2]->SetPosition(Vector3(0.f, 150.f, 0.f));
-	actors[3]->SetPosition(Vector3(0.f, -150.f, 0.f));
+	RegenerateWorld();
+	mGame.GetInput().BindAction("Regenerate", InputEvent::IE_Pressed, this, &GameMode::RegenerateWorld);
 }
 
 void GameMode::Tick( float deltaTime )
@@ -75,6 +63,33 @@ void GameMode::Tick( float deltaTime )
 		float remainingTime = mGame.GetGameTimers().GetRemainingTime( mGameTimer );
 		mHud->SetTime( static_cast<int>(remainingTime + 0.99f) );
 	}
+}
+
+void GameMode::RegenerateWorld()
+{
+	static size_t iterations = 0;
+
+	for (auto actor : mProceduralActors)
+	{
+		actor->SetIsAlive(false);
+	}
+	mProceduralActors.clear();
+
+	for (int i = 0; i < 4; ++i)
+	{
+		auto actor = Actor::Spawn(mGame);
+		auto meshComp = MeshComponent::Create(*(actor.get()));
+		auto procMesh = ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(iterations));
+		meshComp->SetMesh(procMesh);
+		actor->SetScale(30.f);
+		mProceduralActors.push_back(actor);
+	}
+	mProceduralActors[0]->SetPosition(Vector3(150.f, 0.f, 0.f));
+	mProceduralActors[1]->SetPosition(Vector3(-150.f, 0.f, 0.f));
+	mProceduralActors[2]->SetPosition(Vector3(0.f, 150.f, 0.f));
+	mProceduralActors[3]->SetPosition(Vector3(0.f, -150.f, 0.f));
+
+	iterations = (iterations + 1) % 4;
 }
 
 void GameMode::GameOver()
