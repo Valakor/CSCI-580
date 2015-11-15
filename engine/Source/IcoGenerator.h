@@ -4,6 +4,7 @@
 //
 //  Created by Matthew Pohlmann on 11/14/15.
 //  Copyright (c) 2015 Sanjay Madhav. All rights reserved.
+//  Adapted from http://blog.andreaskahler.com/2009/06/creating-icosphere-mesh-in-code.html
 //
 
 #pragma once

@@ -21,11 +21,8 @@ IMPL_ACTOR(GameMode, Actor);
 GameMode::GameMode(Game& game) : Super(game)
 	, mHud(nullptr)
 	, mShip(nullptr)
-	, mScore(0)
-	, bIsGameOver(false)
 {
     mAudio = AudioComponent::Create(*this);
-	mCheckpointReachedSound = game.GetAssetCache().Load<Sound>( "Sounds/Checkpoint.wav" );
 }
 
 void GameMode::BeginPlay()
@@ -54,17 +51,6 @@ void GameMode::BeginPlay()
 	mGame.GetInput().BindAction("Regenerate", InputEvent::IE_Pressed, this, &GameMode::RegenerateWorld);
 }
 
-void GameMode::Tick( float deltaTime )
-{
-	Super::Tick( deltaTime );
-
-	if ( !bIsGameOver )
-	{
-		float remainingTime = mGame.GetGameTimers().GetRemainingTime( mGameTimer );
-		mHud->SetTime( static_cast<int>(remainingTime + 0.99f) );
-	}
-}
-
 void GameMode::RegenerateWorld()
 {
 	static size_t iterations = 0;
@@ -90,11 +76,5 @@ void GameMode::RegenerateWorld()
 	mProceduralActors[3]->SetPosition(Vector3(0.f, -150.f, 0.f));
 
 	iterations = (iterations + 1) % 4;
-}
-
-void GameMode::GameOver()
-{
-	bIsGameOver = true;
-	mHud->SetStatusText( "Game Over!" );
 }
 

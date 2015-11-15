@@ -20,26 +20,17 @@ public:
     GameMode(Game& game);
     
     virtual void BeginPlay() override;
-	virtual void Tick( float deltaTime ) override;
 
 private:
-
-	void GameOver();
 
 	std::vector<ActorPtr> mProceduralActors;
 	void RegenerateWorld();
     
     AudioComponentPtr mAudio;
-    SoundPtr mCheckpointReachedSound;
 
     HUDPtr mHud;
 
 	ShipPtr mShip;
-
-	TimerHandle mGameTimer;
-
-	int mScore;
-	bool bIsGameOver;
 };
 
 DECL_PTR(GameMode);

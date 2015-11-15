@@ -13,6 +13,7 @@
 
 void MeshGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>& indices, std::vector<TexturePtr>& textures, float& radius)
 {
+	// Simple diamond-shaped thing for testing purposes
 	radius = 1.0f;
 
 	verts.emplace_back(Vector3(1.f, 0.f, 0.f), Vector3(1.f, 0.f, 0.f), Vector2(0.f, 0.f));
