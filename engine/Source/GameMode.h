@@ -12,6 +12,7 @@
 #include "HUD.h"
 #include "Ship.h"
 #include "GameTimers.h"
+#include "Tree.h"
 
 class GameMode : public Actor
 {
@@ -31,6 +32,7 @@ private:
     HUDPtr mHud;
 
 	ShipPtr mShip;
+    TreePtr mTree;
 };
 
 DECL_PTR(GameMode);

@@ -104,13 +104,13 @@ void IcoGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>&
 // Adds vertex to our list of vertices. Normalizes the position to be on the unit sphere
 // and uses this vector as the normal at the vertex as well. Returns the index of the new
 // vertex.
-GLuint IcoGenerator::AddVertex(Vertex& vertex)
+GLuint IcoGenerator::AddVertex(Vertex vertex)
 {
 	vertex.mPos.Normalize();
 	vertex.mNormal = vertex.mPos;
 	mVerts->push_back(vertex);
 
-	return mCurrentIndex++;
+    return mCurrentIndex++;
 }
 
 // Returns the index halfway between the edge formed by p1->p2. If it doesn't already

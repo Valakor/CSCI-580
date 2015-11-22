@@ -12,7 +12,7 @@ Game::Game()
 	,mAssetCache(*this, "Assets/")
 	,mShouldQuit(false)
 {
-	_ASSERT(!Game::sInstance);
+//	_ASSERT(!Game::sInstance);
 	Game::sInstance = this;
 }
 
@@ -26,7 +26,7 @@ Game::~Game()
 	TTF_Quit();
 	SDL_Quit();
 
-	_ASSERT(Game::sInstance);
+	//_ASSERT(Game::sInstance);
 	Game::sInstance = nullptr;
 }
 

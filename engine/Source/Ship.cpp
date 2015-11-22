@@ -14,21 +14,23 @@
 #include "Mesh.h"
 #include "CameraComponent.h"
 #include "Checkpoint.h"
+#include "IcoGenerator.h"
 
 IMPL_ACTOR(Ship, Actor);
 
 Ship::Ship(Game& game) : Super(game)
 {
     mMesh = MeshComponent::Create(*this);
-    auto meshPtr = mGame.GetAssetCache().Load<Mesh>("Meshes/PlayerShip.itpmesh2");
-    mMesh->SetMesh(meshPtr);
+   // auto meshPtr = mGame.GetAssetCache().Load<Mesh>("Meshes/PlayerShip.itpmesh2");
+   //  auto meshPtr =  ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(4));
+    //mMesh->SetMesh(meshPtr);
     
     mInput = InputComponent::Create(*this, InputComponent::PreTick);
     mInput->SetLinearSpeed(400.0f);
     mInput->SetAngularSpeed(Math::Pi);
     
     auto collider = SphereCollision::Create(*this);
-    collider->RadiusFromMesh(meshPtr);
+ //   collider->RadiusFromMesh(meshPtr);
     collider->SetScale(1.0f);
     
     mAudio = AudioComponent::Create(*this);
