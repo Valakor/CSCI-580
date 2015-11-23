@@ -28,13 +28,14 @@ int p[] =
 
 #define FADE(t) ((t) * (t) * (t) * ((t) * ((t) * 6 - 15) + 10))
 #define GET_P(i) (p[((i)%256)])
+#define MLERP(f, a, b)   Math::Lerp((a), (b), (f))
 
 static double grad(int hash, double x, double y, double z)
 {
     int h = hash & 15;
     double u = h<8 ? x : y,
            v = h<4 ? y : h==12||h==14 ? x : z;
-    return ((h&1) == 0 ? u : -u) + ((h&2) == 0 ? v : -v);
+    return ((h&1) == 0 ? u : -1*u) + ((h&2) == 0 ? v : -1*v);
 }
 
 double PerlinNoise::Noise(double x, double y, double z)
@@ -59,13 +60,18 @@ double PerlinNoise::Noise(double x, double y, double z)
         BA = GET_P(B)+Z,
         BB = GET_P(B+1)+Z;
     
-    double r = Math::Lerp(w, Math::Lerp(v, Math::Lerp(u, grad(GET_P(AA  ), x  , y  , z   ),
-                                                         grad(GET_P(BA  ), x-1, y  , z   )),
-                                           Math::Lerp(u, grad(GET_P(AB  ), x  , y-1, z   ),
-                                                         grad(GET_P(BB  ), x-1, y-1, z   ))),
-                             Math::Lerp(v, Math::Lerp(u, grad(GET_P(AA+1), x  , y  , z-1 ),
-                                                         grad(GET_P(BA+1), x-1, y  , z-1 )),
-                                           Math::Lerp(u, grad(GET_P(AB+1), x  , y-1, z-1 ),
-                                                         grad(GET_P(BB+1), x-1, y-1, z-1 ))));
-    return r;
+    double r = MLERP(w, MLERP(v, MLERP(u, grad(GET_P(AA  ), x  , y  , z   ),
+                                       grad(GET_P(BA  ), x-1, y  , z   )),
+                                 MLERP(u, grad(GET_P(AB  ), x  , y-1, z   ),
+                                       grad(GET_P(BB  ), x-1, y-1, z   ))),
+                        MLERP(v, MLERP(u, grad(GET_P(AA+1), x  , y  , z-1 ),
+                                       grad(GET_P(BA+1), x-1, y  , z-1 )),
+                                 MLERP(u, grad(GET_P(AB+1), x  , y-1, z-1 ),
+                                       grad(GET_P(BB+1), x-1, y-1, z-1 ))));
+    return (r+1.0)/(2.0);
+}
+
+double OtherNoise(double x, double y, double z, double* lambda)
+{
+    return 1.0f;
 }
