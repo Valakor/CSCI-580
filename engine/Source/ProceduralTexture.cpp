@@ -13,12 +13,13 @@
 bool ProceduralTexture::Load(const char* fileName, class AssetCache* cache)
 {
     
-    mWidth = 512;
-    mHeight = 512;
+    mWidth = 600;
+    mHeight = 450;
     int channels = 3;
     int octaves = 8;
     unsigned char image[mWidth*mHeight*channels];
     
+    int kk = 0;
     for (int y=0; y < mHeight; y++)
     {
         for (int x=0; x < mWidth; x++)
@@ -27,13 +28,26 @@ bool ProceduralTexture::Load(const char* fileName, class AssetCache* cache)
             double x_f = double(x) / mWidth;
             double y_f = double(y) / mHeight;
             
-            pn += (PerlinNoise::Noise(x_f*50, y_f*50, 0));
-            
-            
-            unsigned char color = (unsigned char) (255 * pn);
+            for (int o=0; o < octaves; ++o)
+            {
+                float add = PerlinNoise::Noise(4*x_f * (1 << o), 4*y_f * (1 << o), 0.8 * ( 1 << o));
+                
+                if ( add > 0)
+                {
+                    add = -1*add + 1.0f;
+                }
+                else
+                {
+                    add += 1.0f;
+                }
+                
+                pn += ( add / (1 << o));
+                
+            }
+            unsigned char color = (unsigned char) (floor(255 * pn));
             for (int c=0; c < channels; c++)
             {
-                image[y*mWidth*channels+x*channels+c] = color;
+                image[kk++] = color;
             }
         }
     }
