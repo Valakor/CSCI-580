@@ -103,6 +103,13 @@ void Shader::BindTexture( const char* param, TexturePtr texture, int unit )
 	glActiveTexture( GL_TEXTURE0 );
 	texture->SetActive();
 
+	// We want to wrap textures
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
 	GLuint uniform = glGetUniformLocation( mShaderProgram, param );
 	glUniform1i( uniform, unit );
 }
