@@ -26,11 +26,10 @@ class Tree: public Actor
 public:
     
     Tree(class Game& game);
-    void buildTree(int lvl, int base);
- //   virtual void BeginPlay() override;
- //   virtual void Tick(float deltaTime) override;
-    
- //   void Recenter();
+    void buildTree(int lvl, Vector3 pos);
+    void buildEverGreen(int lvl, Vector3 pos);
+    void buildFluffyTree(int lvl, Vector3 pos);
+    void buildGrass(Vector3 pos);
     
 };
 

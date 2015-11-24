@@ -8,6 +8,8 @@
 
 #include <stdio.h>
 #include "Foliage.h"
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 struct TriIndices
 {
@@ -36,17 +38,15 @@ void Foliage::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>& indi
 
     }
 
-
-    
-
-    
-
-
-
+    else if(mFoliageType == 3) {
+        createGrassCluster(indices);
+        
+    }
 }
 
 GLuint Foliage::AddVertex(Vertex vertex)
 {
+    
     mVerts->push_back(vertex);
     return mCurrentIndex++;
 }
@@ -111,29 +111,25 @@ void Foliage::createBranch(std::vector<GLuint>& indices)
 
 void Foliage::createEverGreen(std::vector<GLuint>& indices) {
     
-    int lvl = 6;
+    int lvl = 4;
     for(int i  = 0; i < lvl; i++) {
-        createPyramid(indices,  (1.7 + (i/10.0f)),  float(lvl - i), (i * 5));
+        createPyramid(indices,  (1.7 + (i/10.0f)),  Vector3(0.0f, 0.0f, float(lvl - i)), 2.0f, (i * 5));
     }
-    
-    
-    
-    
 }
 
-void Foliage::createPyramid(std::vector<GLuint>& indices, float scale, float pos, int offset) {
+void Foliage::createPyramid(std::vector<GLuint>& indices, float scale, Vector3 pos, float height, int offset) {
     
     float x = 1.0f * scale;
     float y = 1.0f * scale;
     float midPtX = ((-x + x) / 2.0);
     float midPtY = ((-y + y) / 2.0);
-    float midPtZ = 2.0f;
+    float midPtZ = height;
     
-    AddVertex(Vertex(Vector3(-x, y, pos), Vector2()));
-    AddVertex(Vertex(Vector3(x, y, pos), Vector2()));
-    AddVertex(Vertex(Vector3(x, -y, pos), Vector2()));
-    AddVertex(Vertex(Vector3(-x, -y, pos), Vector2()));
-    AddVertex(Vertex(Vector3(midPtX, midPtY, pos + midPtZ), Vector2()));
+    AddVertex(Vertex(Vector3(-x + pos.x, y + pos.y, pos.z), Vector2()));
+    AddVertex(Vertex(Vector3(x + pos.x, y + pos.y, pos.z), Vector2()));
+    AddVertex(Vertex(Vector3(x + pos.x, -y + pos.y, pos.z), Vector2()));
+    AddVertex(Vertex(Vector3(-x + pos.x, -y + pos.y, pos.z), Vector2()));
+    AddVertex(Vertex(Vector3(midPtX + pos.x, midPtY + pos.y, pos.z + midPtZ), Vector2()));
     
     auto faces = std::vector<std::shared_ptr<TriIndices>>();
     //Plane
@@ -153,4 +149,18 @@ void Foliage::createPyramid(std::vector<GLuint>& indices, float scale, float pos
     }
     
 }
+
+
+void Foliage::createGrassCluster(std::vector<GLuint>& indices) {
+    //random generator for number in cluster
+    int num = rand() % 10 + 1;
+    
+    for(int i = 0; i < num; i++) {
+        float pos_x = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        float pos_y = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        float height = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        createPyramid(indices,  3.07, Vector3(pos_x * 15.0f, pos_y * 12.0f, 0.0f), height * 30.0f, (i * 5));
+    }
+}
+
 

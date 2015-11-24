@@ -29,7 +29,6 @@ private:
     void createBranch(std::vector<GLuint>& indices);
     void createEverGreen(std::vector<GLuint>& indices);
     //void create
-    void createPyramid(std::vector<GLuint>& indices, float scale, float pos, int offset);
+    void createPyramid(std::vector<GLuint>& indices, float scale, Vector3 pos, float height, int offset);
+    void createGrassCluster(std::vector<GLuint>& indices);
 };
-
-
