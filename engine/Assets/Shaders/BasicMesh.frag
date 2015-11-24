@@ -30,16 +30,15 @@ void main()
     // Compute the diffuse term.
     vec4 N = normalize( outNormal );
     vec4 L = normalize( LightPosW - outWorldPos );
-    float NdotL = max( dot( N, L ), 0 );
+    float NdotL = clamp( dot( N, L ), 0.0, 1.0 );
     vec4 Diffuse =  NdotL * LightColor * MaterialDiffuse;
      
     // Compute the specular term.
     vec4 V = normalize( EyePosW - outWorldPos );
-    vec4 H = normalize( L + V );
-    vec4 R = reflect( -L, N );
-    float RdotV = max( dot( R, V ), 0 );
-    float NdotH = max( dot( N, H ), 0 );
+    vec4 R = -reflect( L, N );
+    float RdotV = clamp( dot( R, V ), 0.0, 1.0 );
     vec4 Specular = pow( RdotV, MaterialShininess ) * LightColor * MaterialSpecular;
-     
+
+	// Accumulate terms
     outColor = ( Emissive + Ambient + Diffuse + Specular ) * texture( uTexture, outTexCoord );
 }
