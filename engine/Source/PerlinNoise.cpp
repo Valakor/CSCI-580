@@ -68,10 +68,31 @@ double PerlinNoise::Noise(double x, double y, double z)
                                        grad(GET_P(BA+1), x-1, y  , z-1 )),
                                  MLERP(u, grad(GET_P(AB+1), x  , y-1, z-1 ),
                                        grad(GET_P(BB+1), x-1, y-1, z-1 ))));
-    return (r+1.0)/(2.0);
+    return r;
 }
 
-double OtherNoise(double x, double y, double z, double* lambda)
+double PerlinNoise::NoiseSample(double x, double y, double z, int octaves, bool ridged)
 {
-    return 1.0f;
+    double pn = 0.0f;
+            
+    for (int o=0; o < octaves; ++o)
+    {
+        float add = (0.5 / (1 << o))*PerlinNoise::Noise(x * (2 << o), y * (2 << o), z * (2 << o));
+        pn += ( add / (1 << o));
+    }
+    
+    if (ridged)
+    {
+        if ( pn > 0)
+        {
+            pn = -1*pn + 1.0f;
+        }
+        else
+        {
+            pn += 1.0f;
+        }
+    }
+    
+    pn = fmax(0.0f, fmin(1.0f, pn));
+    return pn;
 }
