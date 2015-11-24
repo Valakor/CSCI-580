@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 #include "Math.h"
 #include "Texture.h"
+#include <string>
 
 class Shader : public Asset
 {
@@ -25,11 +26,13 @@ public:
 	void BindLightColor(const Vector3& color) { lightColor = color; }
 	void BindLightPosition(const Vector3& pos) { lightPos = pos; }
 
-	void BindAmbientColor(const Vector3& ambient);
-	void BindEmissiveColor(const Vector3& emissive);
-	void BindDiffuseColor(const Vector3& diffuse);
-	void BindSpecularColor(const Vector3& specular);
-	void BindSpecPower(float power);
+	bool BindUniformVector3(const std::string& name, const Vector3& input, float w);
+	bool BindUniformFloat(const std::string& name, float input);
+	bool BindAmbientColor(const Vector3& ambient);
+	bool BindEmissiveColor(const Vector3& emissive);
+	bool BindDiffuseColor(const Vector3& diffuse);
+	bool BindSpecularColor(const Vector3& specular);
+	bool BindSpecPower(float power);
 
 	void UploadUniformsToGPU();
 
