@@ -173,7 +173,7 @@ void Renderer::UpdateViewMatrix( const Matrix4& newMatrix )
 	mBasicMeshShader->BindViewProjection( mView * mProj );
 }
 
-void Renderer::UpdateViewPos(Vector3& newPos)
+void Renderer::UpdateViewPos(const Vector3& newPos)
 {
 	mBasicMeshShader->BindCameraPosition(newPos);
 }

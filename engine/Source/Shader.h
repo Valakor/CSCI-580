@@ -21,14 +21,14 @@ public:
 	void BindViewProjection( const Matrix4& viewProj );
 	void BindWorldTransform( const Matrix4& worldTransform );
 
-	void BindCameraPosition(Vector3& pos) { cameraPos = pos; }
-	void BindLightColor(Vector3& color) { lightColor = color; }
-	void BindLightPosition(Vector3& pos) { lightPos = pos; }
+	void BindCameraPosition(const Vector3& pos) { cameraPos = pos; }
+	void BindLightColor(const Vector3& color) { lightColor = color; }
+	void BindLightPosition(const Vector3& pos) { lightPos = pos; }
 
-	void BindAmbientColor(Vector3& ambient);
-	void BindEmissiveColor(Vector3& emissive);
-	void BindDiffuseColor(Vector3& diffuse);
-	void BindSpecularColor(Vector3& specular);
+	void BindAmbientColor(const Vector3& ambient);
+	void BindEmissiveColor(const Vector3& emissive);
+	void BindDiffuseColor(const Vector3& diffuse);
+	void BindSpecularColor(const Vector3& specular);
 	void BindSpecPower(float power);
 
 	void UploadUniformsToGPU();

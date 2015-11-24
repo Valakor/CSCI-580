@@ -32,7 +32,7 @@ public:
 	void DrawVertexArray(VertexArrayPtr vertArray);
 
 	void UpdateViewMatrix( const Matrix4& newMatrix );
-	void UpdateViewPos(Vector3& newPos);
+	void UpdateViewPos(const Vector3& newPos);
 
 	Vector3 Unproject( const Vector3& screenPoint ) const;
 

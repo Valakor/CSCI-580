@@ -33,25 +33,25 @@ void Shader::BindWorldTransform( const Matrix4& worldTransform )
 	mMatrixBlock.mWorldTransform = worldTransform;
 }
 
-void Shader::BindAmbientColor(Vector3& ambient)
+void Shader::BindAmbientColor(const Vector3& ambient)
 {
 	GLuint ambientLoc = glGetUniformLocation(mShaderProgram, "Ambient");
 	glUniform4f(ambientLoc, ambient.x, ambient.y, ambient.z, 1.0f);
 }
 
-void Shader::BindEmissiveColor(Vector3& emissive)
+void Shader::BindEmissiveColor(const Vector3& emissive)
 {
 	GLuint emissiveLoc = glGetUniformLocation(mShaderProgram, "MaterialEmissive");
 	glUniform4f(emissiveLoc, emissive.x, emissive.y, emissive.z, 1.0f);
 }
 
-void Shader::BindDiffuseColor(Vector3& diffuse)
+void Shader::BindDiffuseColor(const Vector3& diffuse)
 {
 	GLuint diffuseLoc = glGetUniformLocation(mShaderProgram, "MaterialDiffuse");
 	glUniform4f(diffuseLoc, diffuse.x, diffuse.y, diffuse.z, 1.0f);
 }
 
-void Shader::BindSpecularColor(Vector3& specular)
+void Shader::BindSpecularColor(const Vector3& specular)
 {
 	GLuint specLoc = glGetUniformLocation(mShaderProgram, "MaterialSpecular");
 	glUniform4f(specLoc, specular.x, specular.y, specular.z, 1.0f);
