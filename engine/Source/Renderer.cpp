@@ -38,7 +38,7 @@ bool Renderer::Init(int width, int height)
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 8);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
 	// Create our SDL window
 	mWindow = SDL_CreateWindow("Lab 1: Asteroids 2D", 100, 100, width, height, 
@@ -70,7 +70,6 @@ bool Renderer::Init(int width, int height)
 
 	// Glew may still post an error, so clear it...
 	glGetError();
-
 
 	mWidth = width;
 	mHeight = height;
@@ -147,8 +146,15 @@ void Renderer::DrawBasicMesh(VertexArrayPtr vertArray, TexturePtr texture, const
 {
     mBasicMeshShader->SetActive();
     mBasicMeshShader->BindWorldTransform(worldTransform);
+	mBasicMeshShader->BindLightPosition(Vector3());
+	mBasicMeshShader->BindLightColor(Vector3(0.5f, 0.5f, 0.5f));
     mBasicMeshShader->UploadUniformsToGPU();
     
+	mBasicMeshShader->BindAmbientColor(Vector3(0.1f, 0.1f, 0.1f));
+	mBasicMeshShader->BindEmissiveColor(Vector3(0, 0, 0));
+	mBasicMeshShader->BindDiffuseColor(Vector3(1, 1, 1));
+	mBasicMeshShader->BindSpecularColor(Vector3(1, 1, 1));
+	mBasicMeshShader->BindSpecPower(16.0f);
     mBasicMeshShader->BindTexture("uTexture", texture, 0);
     
     DrawVertexArray(vertArray);
@@ -164,6 +170,11 @@ void Renderer::UpdateViewMatrix( const Matrix4& newMatrix )
 {
 	mView = newMatrix;
 	mBasicMeshShader->BindViewProjection( mView * mProj );
+}
+
+void Renderer::UpdateViewPos(const Vector3& newPos)
+{
+	mBasicMeshShader->BindCameraPosition(newPos);
 }
 
 Vector3 Renderer::Unproject( const Vector3& screenPoint ) const
