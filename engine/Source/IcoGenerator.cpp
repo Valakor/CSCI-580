@@ -89,7 +89,7 @@ void IcoGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>&
 			faces2.push_back(std::make_shared<TriIndices>(a, b, c));
 		}
 
-		faces = faces2;
+		faces = std::move(faces2);
 	}
 
 	// finalize index buffer
@@ -111,6 +111,11 @@ GLuint IcoGenerator::AddVertex(Vertex& vertex)
 	mVerts->push_back(vertex);
 
 	return mCurrentIndex++;
+}
+
+GLuint IcoGenerator::AddVertex(Vertex&& vertex)
+{
+	return AddVertex(static_cast<Vertex&>(vertex));
 }
 
 // Returns the index halfway between the edge formed by p1->p2. If it doesn't already

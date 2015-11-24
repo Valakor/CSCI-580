@@ -54,6 +54,9 @@ void GameMode::BeginPlay()
 void GameMode::RegenerateWorld()
 {
 	static size_t iterations = 0;
+	static const size_t MAX_ITER = 5;
+	static const size_t NUM_ICOS = 4;
+	static const float RADIUS = 150.0f;
 
 	for (auto actor : mProceduralActors)
 	{
@@ -61,20 +64,20 @@ void GameMode::RegenerateWorld()
 	}
 	mProceduralActors.clear();
 
-	for (int i = 0; i < 4; ++i)
+	float angle = 0.0f;
+	for (int i = 0; i < NUM_ICOS; ++i)
 	{
 		auto actor = Actor::Spawn(mGame);
 		auto meshComp = MeshComponent::Create(*(actor.get()));
 		auto procMesh = ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(iterations));
 		meshComp->SetMesh(procMesh);
 		actor->SetScale(30.f);
+		actor->SetPosition(Vector3(RADIUS * Math::Cos(angle), RADIUS * Math::Sin(angle), 0.0f));
 		mProceduralActors.push_back(actor);
-	}
-	mProceduralActors[0]->SetPosition(Vector3(150.f, 0.f, 0.f));
-	mProceduralActors[1]->SetPosition(Vector3(-150.f, 0.f, 0.f));
-	mProceduralActors[2]->SetPosition(Vector3(0.f, 150.f, 0.f));
-	mProceduralActors[3]->SetPosition(Vector3(0.f, -150.f, 0.f));
 
-	iterations = (iterations + 1) % 4;
+		angle += Math::TwoPi / NUM_ICOS;
+	}
+
+	iterations = (iterations + 1) % MAX_ITER;
 }
 

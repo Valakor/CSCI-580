@@ -37,6 +37,8 @@ bool Renderer::Init(int width, int height)
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 8);
 
 	// Create our SDL window
 	mWindow = SDL_CreateWindow("Lab 1: Asteroids 2D", 100, 100, width, height, 
@@ -50,6 +52,13 @@ bool Renderer::Init(int width, int height)
 
 	// Create an OpenGL context
 	mContext = SDL_GL_CreateContext(mWindow);
+
+	// Hint to OpenGL that we want multisampling (antialiasing)
+	glEnable(GL_MULTISAMPLE);
+	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST );
+	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST );
+	glEnable(GL_LINE_SMOOTH);
+	glEnable(GL_POLYGON_SMOOTH);
 	
 	// Start up GLEW to bind OpenGL functions
 	glewExperimental = GL_TRUE;
