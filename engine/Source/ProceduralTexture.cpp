@@ -15,9 +15,9 @@ bool ProceduralTexture::Load(const char* fileName, class AssetCache* cache)
     
     mWidth = 600;
     mHeight = 450;
-    int channels = 3;
+    channels = 3;
     int octaves = 8;
-    unsigned char image[mWidth*mHeight*channels];
+	image = new unsigned char[mWidth*mHeight*channels];
     
     int kk = 0;
     for (int y=0; y < mHeight; y++)
@@ -69,3 +69,29 @@ bool ProceduralTexture::Load(const char* fileName, class AssetCache* cache)
     
     return true;
 }
+
+float ProceduralTexture::GetNoise(float u, float v)
+{
+	// mod to range [0.0f, 1.0f) to tile texture
+	float uI, vI;
+	u = modff( u, &uI );
+	v = modff( v, &vI );
+	if ( u < 0.f )
+	{
+		u = 1.f + u;
+	}
+	if ( v < 0.f )
+	{
+		v = 1.f + v;
+	}
+
+	// get texel coordinate
+	int tX, tY;
+	tX = u * (mWidth - 1);
+	tY = v * (mHeight - 1);
+
+	int index = mWidth * tY + tX;
+	index *= channels;
+	return image[index] / 255.0f;
+}
+

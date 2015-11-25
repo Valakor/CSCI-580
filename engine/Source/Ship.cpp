@@ -74,5 +74,6 @@ void Ship::Tick(float deltaTime)
 void Ship::Recenter()
 {
 	SetRotation( Quaternion::Identity );
+	SetPosition(Vector3(0.0f, 0.0f, 0.0f));
 	mCamera->SnapToIdealPosition();
 }

@@ -10,6 +10,8 @@
 #include "IcoGenerator.h"
 #include "AssetCache.h"
 #include "Game.h"
+#include "Texture.h"
+#include "ProceduralTexture.h"
 
 struct TriIndices
 {
@@ -20,7 +22,7 @@ struct TriIndices
 void IcoGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>& indices, std::vector<TexturePtr>& textures, float& radius)
 {
 	radius = 1.0f;
-	textures.push_back(Game::Get().GetAssetCache().Load<Texture>("Textures/checkerboard.png"));
+	ProceduralTexturePtr perlin = Game::Get().GetAssetCache().Load<ProceduralTexture>("perlin");
 
 	mVerts = &verts;
 	mIndices = &indices;
@@ -102,6 +104,51 @@ void IcoGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>&
 		indices.push_back(tri->v2);
 		indices.push_back(tri->v3);
 	}
+
+	// deform based on perlin noise
+	static const float MaxDeformation = 0.05f;
+	for (auto& v : verts)
+	{
+		// [0, 1]
+		float noise = 1.0f - perlin->GetNoise(v.mTexCoord.x, v.mTexCoord.y);
+
+		// [-1, 1]
+		noise = (noise - 0.5f) * 2.0f;
+		v.mPos += noise * v.mNormal * MaxDeformation;
+	}
+
+	// we want flat shading, so we need to duplicate verts and use surface normals
+	std::vector<Vertex> newVerts;
+	std::vector<GLuint> newIndices;
+	newVerts.reserve(indices.size());
+	newIndices.reserve(indices.size());
+
+	for (int i = 0; i < indices.size(); i += 3)
+	{
+		Vertex v1 = verts[indices[i]];
+		Vertex v2 = verts[indices[i+1]];
+		Vertex v3 = verts[indices[i+2]];
+
+		Vector3 v12 = v2.mPos - v1.mPos;
+		Vector3 v13 = v3.mPos - v1.mPos;
+
+		Vector3 n = Cross(v12, v13);
+		n.Normalize();
+
+		v1.mNormal = n;
+		v2.mNormal = n;
+		v3.mNormal = n;
+
+		newVerts.push_back(v1);
+		newVerts.push_back(v2);
+		newVerts.push_back(v3);
+		newIndices.push_back(i);
+		newIndices.push_back(i+1);
+		newIndices.push_back(i+2);
+	}
+
+	verts = std::move(newVerts);
+	indices = std::move(newIndices);
 }
 
 // Adds vertex to our list of vertices. Normalizes the position to be on the unit sphere
@@ -109,16 +156,22 @@ void IcoGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>&
 // vertex.
 GLuint IcoGenerator::AddVertex(Vertex& vertex)
 {
+	// Positions are being calculated on the unit sphere, so they should be normalized
 	vertex.mPos.Normalize();
-	vertex.mNormal = vertex.mPos;
-	vertex.mTexCoord = Vector2(1.5f + atan2f(vertex.mNormal.y, vertex.mNormal.x) / Math::TwoPi, 1.5f - asinf(vertex.mNormal.z));
-	SDL_Log("UV: [%.2f, %.2f]\n", vertex.mTexCoord.x, vertex.mTexCoord.y);
 
+	// Use position (already normalized) as the normal as well
+	vertex.mNormal = vertex.mPos;
+
+	// Spherical UV mapping
+	vertex.mTexCoord = Vector2(0.5f + atan2f(vertex.mNormal.y, vertex.mNormal.x) / Math::TwoPi, 0.5f - asinf(vertex.mNormal.z));
+	vertex.mTexCoord.x *= 2.0f;
+	vertex.mTexCoord.y *= 0.5f;
 	mVerts->push_back(vertex);
 
 	return mCurrentIndex++;
 }
 
+// Overload of AddVertex(Vertex&) to enabled lvalue reference calls
 GLuint IcoGenerator::AddVertex(Vertex&& vertex)
 {
 	return AddVertex(static_cast<Vertex&>(vertex));

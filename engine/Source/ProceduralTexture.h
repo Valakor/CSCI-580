@@ -13,10 +13,15 @@ class ProceduralTexture : public Texture
 {
     DECL_ASSET(ProceduralTexture, Texture);
 public:
-    ProceduralTexture() : Texture() {}
-    virtual ~ProceduralTexture() {Texture::~Texture();}
+    ProceduralTexture() : Texture(), channels(1), image(nullptr) {}
+	virtual ~ProceduralTexture() { if (image) delete[] image; Texture::~Texture();}
+	float GetNoise(float u, float v);
 protected:
     bool Load(const char* fileName, class AssetCache* cache) override;
+	int channels;
+
+private:
+	unsigned char* image;
 };
 
 DECL_PTR(ProceduralTexture)
