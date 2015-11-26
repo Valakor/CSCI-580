@@ -10,8 +10,7 @@
 #include "IcoGenerator.h"
 #include "AssetCache.h"
 #include "Game.h"
-#include "Texture.h"
-#include "ProceduralTexture.h"
+#include "PerlinNoise.h"
 
 struct TriIndices
 {
@@ -22,7 +21,6 @@ struct TriIndices
 void IcoGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>& indices, std::vector<TexturePtr>& textures, float& radius)
 {
 	radius = 1.0f;
-	ProceduralTexturePtr perlin = Game::Get().GetAssetCache().Load<ProceduralTexture>("perlin");
 
 	mVerts = &verts;
 	mIndices = &indices;
@@ -106,11 +104,11 @@ void IcoGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>&
 	}
 
 	// deform based on perlin noise
-	static const float MaxDeformation = 0.05f;
+	static const float MaxDeformation = 0.2f;
 	for (auto& v : verts)
 	{
 		// [0, 1]
-		float noise = 1.0f - perlin->GetNoise(v.mTexCoord.x, v.mTexCoord.y);
+		double noise = PerlinNoise::NoiseSample(v.mPos.x, v.mPos.y, v.mPos.z, 4, false);
 
 		// [-1, 1]
 		noise = (noise - 0.5f) * 2.0f;
