@@ -23,7 +23,9 @@ struct IcoGenerator : public MeshGenerator
 
 private:
 
-	GLuint AddVertex(Vertex vertex);
+	GLuint AddVertex(Vertex& vertex);
+	GLuint AddVertex(Vertex&& vertex);
+
 	GLuint GetMiddlePoint(GLuint p1, GLuint p2);
 
 	GLuint mCurrentIndex;

@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 #include "Math.h"
 #include "Texture.h"
+#include <string>
 
 class Shader : public Asset
 {
@@ -20,6 +21,18 @@ public:
 	// NOTE: Bind functions assume that this shader is active
 	void BindViewProjection( const Matrix4& viewProj );
 	void BindWorldTransform( const Matrix4& worldTransform );
+
+	void BindCameraPosition(const Vector3& pos) { cameraPos = pos; }
+	void BindLightColor(const Vector3& color) { lightColor = color; }
+	void BindLightPosition(const Vector3& pos) { lightPos = pos; }
+
+	bool BindUniformVector3(const std::string& name, const Vector3& input, float w);
+	bool BindUniformFloat(const std::string& name, float input);
+	bool BindAmbientColor(const Vector3& ambient);
+	bool BindEmissiveColor(const Vector3& emissive);
+	bool BindDiffuseColor(const Vector3& diffuse);
+	bool BindSpecularColor(const Vector3& specular);
+	bool BindSpecPower(float power);
 
 	void UploadUniformsToGPU();
 
@@ -38,6 +51,9 @@ private:
 	};
 
 	MatrixBlock mMatrixBlock;
+	Vector3 cameraPos;
+	Vector3 lightColor;
+	Vector3 lightPos;
 
 	GLuint mVertexShader;
 	GLuint mFragmentShader;

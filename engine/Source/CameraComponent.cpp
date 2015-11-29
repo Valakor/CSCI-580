@@ -76,4 +76,5 @@ void CameraComponent::UpdateViewMatrix()
 
 	Matrix4 viewMat = Matrix4::CreateLookAt( mPos, lookAt, cameraUp );
 	mOwner.GetGame().GetRenderer().UpdateViewMatrix( viewMat );
+	mOwner.GetGame().GetRenderer().UpdateViewPos(mPos);
 }

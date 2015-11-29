@@ -49,7 +49,9 @@ void GameMode::BeginPlay()
 	mShip = Ship::Spawn( mGame );
     
     mTree = Tree::Spawn( mGame );
-    mTree->buildTree(2, 0);
+  //  mTree->buildEverGreen(2, Vector3(0.0f, -20.0f, 0.0f));
+  //  mTree->buildGrass(Vector3(0.0f, 0.0f, 0.0f));
+    mTree->buildTree(2, Vector3(110.0f, 0.0f, -50.0f));
 
 	// Spawn a couple procedural mesh actors
 //	RegenerateWorld();
@@ -59,6 +61,9 @@ void GameMode::BeginPlay()
 void GameMode::RegenerateWorld()
 {
 	static size_t iterations = 0;
+	static const size_t MAX_ITER = 5;
+	static const size_t NUM_ICOS = 4;
+	static const float RADIUS = 150.0f;
 
 	for (auto actor : mProceduralActors)
 	{
@@ -66,24 +71,22 @@ void GameMode::RegenerateWorld()
 	}
 	mProceduralActors.clear();
 
-	for (int i = 0; i < 4; ++i)
+	float angle = 0.0f;
+	for (int i = 0; i < NUM_ICOS; ++i)
 	{
 		auto actor = Actor::Spawn(mGame);
 		auto meshComp = MeshComponent::Create(*(actor.get()));
 		auto procMesh = ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(iterations));
-    //    auto procMesh = ProceduralMesh::StaticCreate(std::make_shared<Environment>());
 		meshComp->SetMesh(procMesh);
 		actor->SetScale(30.f);
+		actor->SetPosition(Vector3(RADIUS * Math::Cos(angle), RADIUS * Math::Sin(angle), 0.0f));
 		mProceduralActors.push_back(actor);
+
+		angle += Math::TwoPi / NUM_ICOS;
 	}
 
-    
-	mProceduralActors[0]->SetPosition(Vector3(150.f, 0.f, 0.f));
-	mProceduralActors[1]->SetPosition(Vector3(-150.f, 0.f, 0.f));
-	mProceduralActors[2]->SetPosition(Vector3(0.f, 150.f, 0.f));
-	mProceduralActors[3]->SetPosition(Vector3(0.f, -150.f, 0.f));
- 
-    
-	iterations = (iterations + 1) % 4;
+
+	iterations = (iterations + 1) % MAX_ITER;
+
 }
 

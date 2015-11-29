@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <cassert>
 #include <SDL/SDL.h>
 #include <SDL/SDL_mixer.h>
 #include <SDL/SDL_ttf.h>
@@ -12,7 +13,7 @@ Game::Game()
 	,mAssetCache(*this, "Assets/")
 	,mShouldQuit(false)
 {
-//	_ASSERT(!Game::sInstance);
+	assert(!Game::sInstance);
 	Game::sInstance = this;
 }
 
@@ -26,7 +27,7 @@ Game::~Game()
 	TTF_Quit();
 	SDL_Quit();
 
-	//_ASSERT(Game::sInstance);
+	assert(Game::sInstance);
 	Game::sInstance = nullptr;
 }
 

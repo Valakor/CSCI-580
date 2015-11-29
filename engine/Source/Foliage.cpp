@@ -10,6 +10,7 @@
 #include "Foliage.h"
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
+#include "Game.h"
 
 struct TriIndices
 {
@@ -31,15 +32,18 @@ void Foliage::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>& indi
     
     if(mFoliageType == 1) {
        createBranch(indices);
+       textures.push_back(Game::Get().GetAssetCache().Load<Texture>("Textures/Branch.png"));
     }
 
     else if(mFoliageType == 2) {
        createEverGreen(indices);
+        textures.push_back(Game::Get().GetAssetCache().Load<Texture>("Textures/EverGreen.png"));
 
     }
 
     else if(mFoliageType == 3) {
         createGrassCluster(indices);
+        textures.push_back(Game::Get().GetAssetCache().Load<Texture>("Textures/Grass.png"));
         
     }
 }
@@ -83,6 +87,7 @@ void Foliage::createBranch(std::vector<GLuint>& indices)
     faces.push_back(std::make_shared<TriIndices>(5, 6, 7));
     faces.push_back(std::make_shared<TriIndices>(5, 7, 8));
     faces.push_back(std::make_shared<TriIndices>(5, 8, 9));
+    
     //Trunk
     faces.push_back(std::make_shared<TriIndices>(3, 9, 8));
     faces.push_back(std::make_shared<TriIndices>(3, 9, 4));
@@ -96,8 +101,8 @@ void Foliage::createBranch(std::vector<GLuint>& indices)
     faces.push_back(std::make_shared<TriIndices>(2, 6, 7));
     faces.push_back(std::make_shared<TriIndices>(2, 6, 1));
     
-    faces.push_back(std::make_shared<TriIndices>(2, 7, 8));
-    faces.push_back(std::make_shared<TriIndices>(2, 7, 3));
+    faces.push_back(std::make_shared<TriIndices>(2, 3, 8));
+    faces.push_back(std::make_shared<TriIndices>(8, 7, 2));
     
     // finalize index buffer
     for (auto tri : faces)

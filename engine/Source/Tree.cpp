@@ -73,7 +73,7 @@ void Tree::buildEverGreen(int lvl, Vector3 pos) {
     auto meshPtr =  ProceduralMesh::StaticCreate(std::make_shared<Foliage>(1));
     meshComp->SetMesh(meshPtr);
     actor->SetPosition(Vector3(pos.x, pos.y, pos.z));
-    actor->SetScale(30.0f);
+    actor->SetScale(50.0f);
     
     
     auto actor2 = Actor::Spawn(mGame);
@@ -81,8 +81,7 @@ void Tree::buildEverGreen(int lvl, Vector3 pos) {
     auto meshPtr2 =  ProceduralMesh::StaticCreate(std::make_shared<Foliage>(2));
     meshComp2->SetMesh(meshPtr2);
     actor2->SetPosition(Vector3(pos.x, pos.y, pos.z + 50.0f));
-    actor2->SetScale(20.0f);
-    
+    actor2->SetScale(20.0f);     
 }
 
 void Tree::buildFluffyTree(int lvl, Vector3 pos) {

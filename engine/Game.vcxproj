@@ -43,6 +43,7 @@
     <ClInclude Include="Source\Random.h" />
     <ClInclude Include="Source\Renderer.h" />
     <ClInclude Include="Source\Shader.h" />
+    <ClInclude Include="Source\ShaderCache.h" />
     <ClInclude Include="Source\Ship.h" />
     <ClInclude Include="Source\Sound.h" />
     <ClInclude Include="Source\SphereCollision.h" />
@@ -83,6 +84,7 @@
     <ClCompile Include="Source\Random.cpp" />
     <ClCompile Include="Source\Renderer.cpp" />
     <ClCompile Include="Source\Shader.cpp" />
+    <ClCompile Include="Source\ShaderCache.cpp" />
     <ClCompile Include="Source\Ship.cpp" />
     <ClCompile Include="Source\Sound.cpp" />
     <ClCompile Include="Source\SphereCollision.cpp" />

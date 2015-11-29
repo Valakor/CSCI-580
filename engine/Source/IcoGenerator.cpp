@@ -8,6 +8,8 @@
 //
 
 #include "IcoGenerator.h"
+#include "AssetCache.h"
+#include "Game.h"
 
 struct TriIndices
 {
@@ -18,6 +20,7 @@ struct TriIndices
 void IcoGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>& indices, std::vector<TexturePtr>& textures, float& radius)
 {
 	radius = 1.0f;
+	textures.push_back(Game::Get().GetAssetCache().Load<Texture>("Textures/checkerboard.png"));
 
 	mVerts = &verts;
 	mIndices = &indices;
@@ -89,7 +92,7 @@ void IcoGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>&
 			faces2.push_back(std::make_shared<TriIndices>(a, b, c));
 		}
 
-		faces = faces2;
+		faces = std::move(faces2);
 	}
 
 	// finalize index buffer
@@ -108,9 +111,17 @@ GLuint IcoGenerator::AddVertex(Vertex vertex)
 {
 	vertex.mPos.Normalize();
 	vertex.mNormal = vertex.mPos;
+	vertex.mTexCoord = Vector2(1.5f + atan2f(vertex.mNormal.y, vertex.mNormal.x) / Math::TwoPi, 1.5f - asinf(vertex.mNormal.z));
+	SDL_Log("UV: [%.2f, %.2f]\n", vertex.mTexCoord.x, vertex.mTexCoord.y);
+
 	mVerts->push_back(vertex);
 
     return mCurrentIndex++;
+}
+
+GLuint IcoGenerator::AddVertex(Vertex&& vertex)
+{
+	return AddVertex(static_cast<Vertex&>(vertex));
 }
 
 // Returns the index halfway between the edge formed by p1->p2. If it doesn't already
@@ -132,7 +143,7 @@ GLuint IcoGenerator::GetMiddlePoint(GLuint p1, GLuint p2)
 	// Not cached, create a new vertex
 	Vertex point1 = (*mVerts)[p1];
 	Vertex point2 = (*mVerts)[p2];
-	Vertex middle = Vertex((point1.mPos + point2.mPos) * 0.5f, point1.mTexCoord);
+	Vertex middle = Vertex((point1.mPos + point2.mPos) * 0.5f, Vector2());
 
 	GLuint i = AddVertex(middle);
 	mMiddlePointIndexCache.insert(std::make_pair(key, i));

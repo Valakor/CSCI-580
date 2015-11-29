@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <SDL/SDL.h>
+#include "ShaderCache.h"
 
 Shader::Shader()
 	:mVertexShader( 0 )
@@ -33,28 +34,81 @@ void Shader::BindWorldTransform( const Matrix4& worldTransform )
 	mMatrixBlock.mWorldTransform = worldTransform;
 }
 
+bool Shader::BindUniformVector3(const std::string& name, const Vector3& input, float w)
+{
+	int glLoc = glGetUniformLocation(mShaderProgram, name.c_str());
+	if (glLoc >= 0)
+	{
+		glUniform4f(glLoc, input.x, input.y, input.z, w);
+		return true;
+	}
+
+	return false;
+}
+
+bool Shader::BindUniformFloat(const std::string& name, float input)
+{
+	int glLoc = glGetUniformLocation(mShaderProgram, name.c_str());
+	if (glLoc >= 0)
+	{
+		glUniform1f(glLoc, input);
+		return true;
+	}
+
+	return false;
+}
+
+bool Shader::BindAmbientColor(const Vector3& ambient)
+{
+	return BindUniformVector3("Ambient", ambient, 1.0f);
+}
+
+bool Shader::BindEmissiveColor(const Vector3& emissive)
+{
+	return BindUniformVector3("MaterialEmissive", emissive, 1.0f);
+}
+
+bool Shader::BindDiffuseColor(const Vector3& diffuse)
+{
+	return BindUniformVector3("MaterialDiffuse", diffuse, 1.0f);
+}
+
+bool Shader::BindSpecularColor(const Vector3& specular)
+{
+	return BindUniformVector3("MaterialSpecular", specular, 1.0f);
+}
+
+bool Shader::BindSpecPower(float power)
+{
+	return BindUniformFloat("MaterialShininess", power);
+}
+
 void Shader::UploadUniformsToGPU()
 {
-	//// Bind this buffer to index 0
-	//glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
-	//glBindBufferBase(GL_UNIFORM_BUFFER, 0, mUniformBuffer);
-	//
-	//// Copy uniform buffer data
-	//GLvoid* p = glMapBufferRange(GL_UNIFORM_BUFFER, 0, sizeof(mMatrixBlock),
-	//				 GL_MAP_INVALIDATE_BUFFER_BIT|GL_MAP_WRITE_BIT);
-	//memcpy(p, &mMatrixBlock, sizeof(mMatrixBlock));
-	//glUnmapBuffer(GL_UNIFORM_BUFFER);
-
 	GLuint view = glGetUniformLocation( mShaderProgram, "uViewProj" );
 	glUniformMatrix4fv( view, 1, GL_FALSE, mMatrixBlock.mViewProj.GetAsFloatPtr() );
 	GLuint world = glGetUniformLocation( mShaderProgram, "uWorldTransform" );
 	glUniformMatrix4fv( world, 1, GL_FALSE, mMatrixBlock.mWorldTransform.GetAsFloatPtr() );
+	
+	GLuint camera = glGetUniformLocation(mShaderProgram, "EyePosW");
+	glUniform4f(camera, cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
+	GLuint light = glGetUniformLocation(mShaderProgram, "LightPosW");
+	glUniform4f(light, lightPos.x, lightPos.y, lightPos.z, 1.0f);
+	GLuint lightC = glGetUniformLocation(mShaderProgram, "LightColor");
+	glUniform4f(lightC, lightColor.x, lightColor.y, lightColor.z, 1.0f);
 }
 
 void Shader::BindTexture( const char* param, TexturePtr texture, int unit )
 {
 	glActiveTexture( GL_TEXTURE0 );
 	texture->SetActive();
+
+	// We want to wrap textures
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 	GLuint uniform = glGetUniformLocation( mShaderProgram, param );
 	glUniform1i( uniform, unit );
@@ -127,17 +181,12 @@ bool Shader::Load( const char* fileName, class AssetCache* cache )
 		return false;
 	}
 
-	SetActive();
-
-	//// Now setup the uniform buffer object
-	//glGenBuffers(1, &mUniformBuffer);
-	//glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
-	//glBufferData(GL_UNIFORM_BUFFER, sizeof(mMatrixBlock), &mMatrixBlock, GL_DYNAMIC_DRAW);
-
-	//// Bind it to the program
-	//GLuint block = glGetUniformBlockIndex(mShaderProgram, "MatrixBlock");
-	//glUniformBlockBinding(mShaderProgram, block, 0);
-	//glBindBufferBase(GL_UNIFORM_BUFFER, 0, mUniformBuffer);
+	// add to the game shader cache
+	if (!ShaderCache::Get().RegisterShader(fileName, ThisPtr()))
+	{
+		SDL_Log("Shader program %s already registered in shader cache.", fileName);
+		return false;
+	}
 
 	return true;
 }
