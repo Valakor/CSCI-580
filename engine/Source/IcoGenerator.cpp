@@ -108,11 +108,15 @@ void IcoGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>&
 	for (auto& v : verts)
 	{
 		// [0, 1]
-		double noise = PerlinNoise::NoiseSample(v.mPos.x, v.mPos.y, v.mPos.z, 4, false);
+		double noise = PerlinNoise::NoiseSample(v.mPos.x, v.mPos.y, v.mPos.z, 8, false);
 
 		// [-1, 1]
 		noise = (noise - 0.5f) * 2.0f;
-		v.mPos += noise * v.mNormal * MaxDeformation;
+        auto vv = noise * v.mNormal * MaxDeformation;
+        v.mPos += vv;
+        auto vv_mag = vv.Length();
+        v.mTexCoord.x = fmin(vv_mag*3, 1.0f);
+        v.mTexCoord.y = (1.0f - fmin(vv_mag*3, 1.0f));
 	}
 
 	// we want flat shading, so we need to duplicate verts and use surface normals
@@ -160,10 +164,12 @@ GLuint IcoGenerator::AddVertex(Vertex& vertex)
 	// Use position (already normalized) as the normal as well
 	vertex.mNormal = vertex.mPos;
 
+    /*
 	// Spherical UV mapping
 	vertex.mTexCoord = Vector2(0.5f + atan2f(vertex.mNormal.y, vertex.mNormal.x) / Math::TwoPi, 0.5f - asinf(vertex.mNormal.z));
 	vertex.mTexCoord.x *= 2.0f;
 	vertex.mTexCoord.y *= 0.5f;
+    */
 	mVerts->push_back(vertex);
 
 	return mCurrentIndex++;

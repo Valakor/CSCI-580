@@ -78,7 +78,7 @@ double PerlinNoise::NoiseSample(double x, double y, double z, int octaves, bool 
     for (int o=0; o < octaves; ++o)
     {
         float add = (0.5 / (1 << o))*PerlinNoise::Noise(x * (2 << o), y * (2 << o), z * (2 << o));
-        pn += ( add / (1 << o));
+        pn += ( add );
     }
     
     if (ridged)

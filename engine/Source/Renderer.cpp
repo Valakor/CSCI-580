@@ -147,7 +147,7 @@ void Renderer::DrawBasicMesh(VertexArrayPtr vertArray, TexturePtr texture, const
     mBasicMeshShader->SetActive();
     mBasicMeshShader->BindWorldTransform(worldTransform);
 	mBasicMeshShader->BindLightPosition(Vector3());
-	mBasicMeshShader->BindLightColor(Vector3(0.5f, 0.5f, 0.5f));
+	mBasicMeshShader->BindLightColor(Vector3(1.0f, 1.0f, 1.0f));
     mBasicMeshShader->UploadUniformsToGPU();
     
 	mBasicMeshShader->BindAmbientColor(Vector3(0.1f, 0.1f, 0.1f));
