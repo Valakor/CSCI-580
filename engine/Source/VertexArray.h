@@ -6,6 +6,7 @@
 #pragma once
 #include "Math.h"
 #include <memory>
+#include <vector>
 #include <GL/glew.h>
 
 // For simplicity, we assume a set vertex format
@@ -54,10 +55,15 @@ public:
 	GLuint GetVertexBuffer() const { return mVertexBuffer; }
 	GLuint GetIndexBuffer() const { return mIndexBuffer; }
 	GLuint GetVertexArray() const { return mVertexArray; }
+	const std::vector<Vertex>& GetVerts() const { return mVerts; }
+	const std::vector<GLuint>& GetIndices() const { return mIndices; }
 private:
 	size_t mVertexCount;
 	size_t mIndexCount;
 	GLuint mVertexBuffer;
 	GLuint mIndexBuffer;
 	GLuint mVertexArray;
+
+	std::vector<Vertex> mVerts;
+	std::vector<GLuint> mIndices;
 };

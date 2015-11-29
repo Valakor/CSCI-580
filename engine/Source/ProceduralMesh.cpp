@@ -71,7 +71,7 @@ bool ProceduralMesh::Generate()
 
 	if (mTextures.size() == 0)
 	{
-		mTextures.push_back(Game::Get().GetAssetCache().Load<Texture>("Textures/Default.png"));
+		mTextures.push_back(Game::Get().GetAssetCache().Load<Texture>("Textures/EarthGradient.png"));
 	}
 
 	mVertexArray = VertexArray::Create(verts.data(), verts.size(), indices.data(), indices.size());

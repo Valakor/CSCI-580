@@ -24,7 +24,6 @@ public:
 	static std::shared_ptr<Texture> CreateFromSurface(struct SDL_Surface* surface);
 protected:
 	bool Load(const char* fileName, class AssetCache* cache) override;
-private:
 	GLuint mTextureID;
 	int mWidth;
 	int mHeight;

@@ -8,6 +8,9 @@ VertexArrayPtr VertexArray::Create(const Vertex* verts, size_t vertCount, const 
 
 VertexArray::VertexArray(const Vertex* verts, size_t vertCount, const GLuint* indices, size_t indexCount)
 {
+	mVerts.assign(verts, verts + vertCount);
+	mIndices.assign(indices, indices + indexCount);
+
 	mVertexCount = vertCount;
 	mIndexCount = indexCount;
 
@@ -18,12 +21,12 @@ VertexArray::VertexArray(const Vertex* verts, size_t vertCount, const GLuint* in
 	// Create vertex buffer
 	glGenBuffers(1, &mVertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, mVertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, vertCount * sizeof(Vertex), verts, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertCount * sizeof(Vertex), mVerts.data(), GL_STATIC_DRAW);
 
 	// Create index buffer
 	glGenBuffers(1, &mIndexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(GLuint), indices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(GLuint), mIndices.data(), GL_STATIC_DRAW);
 
 	// Specify the vertex attributes
 	// Position is 3 floats starting at offset 0

@@ -38,6 +38,8 @@ public:
 
 	// Bind the specified texture to the specified unit
 	void BindTexture( const char* param, TexturePtr texture, int unit );
+
+	GLuint GetShaderProgram() const { return mShaderProgram; }
 protected:
 	bool Load( const char* fileName, class AssetCache* cache ) override;
 	bool IsCompiled( GLuint shader );
