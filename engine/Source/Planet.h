@@ -23,7 +23,6 @@ public:
 	Planet(class Game& game);
 
 	void SetIcoIterations(size_t iterations);
-    
 };
 
 DECL_PTR(Planet);
