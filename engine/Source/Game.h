@@ -15,6 +15,12 @@
 class Game
 {
 public:
+
+	static Game& Get()
+	{
+		return *Game::sInstance;
+	}
+
 	Game();
 	~Game();
 	bool Init();
@@ -52,4 +58,6 @@ private:
 	GameModePtr mGameMode;
 
 	bool mShouldQuit;
+
+	static Game* sInstance;
 };

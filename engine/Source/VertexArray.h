@@ -6,6 +6,7 @@
 #pragma once
 #include "Math.h"
 #include <memory>
+#include <vector>
 #include <GL/glew.h>
 
 // For simplicity, we assume a set vertex format
@@ -21,11 +22,13 @@ struct Vertex
 
 	Vertex(float x, float y, float z, float u, float v)
 		:mPos(x, y, z)
+		,mNormal(0.f, 0.f, 0.f)
 		,mTexCoord(u,v)
 	{}
 
 	Vertex(const Vector3& pos, const Vector2& texcoord)
 		:mPos(pos)
+		,mNormal(0.f, 0.f, 0.f)
 		,mTexCoord(texcoord)
 	{}
 
@@ -52,10 +55,15 @@ public:
 	GLuint GetVertexBuffer() const { return mVertexBuffer; }
 	GLuint GetIndexBuffer() const { return mIndexBuffer; }
 	GLuint GetVertexArray() const { return mVertexArray; }
+	const std::vector<Vertex>& GetVerts() const { return mVerts; }
+	const std::vector<GLuint>& GetIndices() const { return mIndices; }
 private:
 	size_t mVertexCount;
 	size_t mIndexCount;
 	GLuint mVertexBuffer;
 	GLuint mIndexBuffer;
 	GLuint mVertexArray;
+
+	std::vector<Vertex> mVerts;
+	std::vector<GLuint> mIndices;
 };

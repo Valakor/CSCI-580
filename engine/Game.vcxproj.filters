@@ -125,7 +125,16 @@
     <ClInclude Include="Source\Checkpoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Arrow.h">
+    <ClInclude Include="Source\ProceduralMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\IcoGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PerlinNoise.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Planet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -238,7 +247,16 @@
     <ClCompile Include="Source\Checkpoint.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Arrow.cpp">
+    <ClCompile Include="Source\ProceduralMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\IcoGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PerlinNoise.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Planet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

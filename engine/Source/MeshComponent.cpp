@@ -19,8 +19,8 @@ MeshComponent::MeshComponent(Actor& owner) : Super(owner)
 
 void MeshComponent::Draw(class Renderer& render)
 {
-    if (mMesh)
+    if (mMesh && mMesh->GetShader())
     {
-        render.DrawBasicMesh(mMesh->GetVertexArray(), mMesh->GetTexture(0), mOwner.GetWorldTransform());
+        render.DrawBasicMesh(mMesh->GetShader(), mMesh->GetVertexArray(), mMesh->GetTexture(0), mOwner.GetWorldTransform());
     }
 }

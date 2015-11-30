@@ -10,20 +10,14 @@
 #include "Game.h"
 #include "Asteroid.h"
 #include "Random.h"
-#include "Checkpoint.h"
-#include <cfloat>
 
 IMPL_ACTOR(GameMode, Actor);
 
 GameMode::GameMode(Game& game) : Super(game)
 	, mHud(nullptr)
 	, mShip(nullptr)
-	, mArrow(nullptr)
-	, mScore(0)
-	, bIsGameOver(false)
 {
     mAudio = AudioComponent::Create(*this);
-	mCheckpointReachedSound = game.GetAssetCache().Load<Sound>( "Sounds/Checkpoint.wav" );
 }
 
 void GameMode::BeginPlay()
@@ -32,7 +26,6 @@ void GameMode::BeginPlay()
     
 	// Spawn HUD
     mHud = HUD::Spawn( mGame );
-    mHud->SetStatusText("Go!!!", 2.0f);
 
 	// Spawn Asteroids
 	const int NUM_ASTEROIDS = 500;
@@ -48,60 +41,32 @@ void GameMode::BeginPlay()
 	// Spawn ship
 	mShip = Ship::Spawn( mGame );
 
-	// Spawn waypoint arrow
-	mArrow = Arrow::Spawn( mGame );
-	mArrow->SetPlayer( mShip );
-
-	// Spawn first checkpoint
-	SpawnRandomCheckpoint();
-
-	// Start game timer
-	mGame.GetGameTimers().SetTimer( mGameTimer, this, &GameMode::GameOver, 15.0f, false );
-}
-
-void GameMode::Tick( float deltaTime )
-{
-	Super::Tick( deltaTime );
-
-	if ( !bIsGameOver )
+	// Create a couple planets
+	static const size_t NUM_PLANETS = 4;
+	static const float RADIUS = 150.0f;
+	float angle = 0.0f;
+	for (int i = 0; i < NUM_PLANETS; ++i)
 	{
-		float remainingTime = mGame.GetGameTimers().GetRemainingTime( mGameTimer );
-		mHud->SetTime( static_cast<int>(remainingTime + 0.99f) );
+		auto planet = Planet::Spawn(mGame);
+		planet->SetPosition(Vector3(RADIUS * Math::Cos(angle), RADIUS * Math::Sin(angle), 0.0f));
+		mPlanets.push_back(planet);
+
+		angle += Math::TwoPi / NUM_PLANETS;
 	}
+	RegenerateWorld();
+	mGame.GetInput().BindAction("Regenerate", InputEvent::IE_Pressed, this, &GameMode::RegenerateWorld);
 }
 
-bool GameMode::CheckpointReached()
+void GameMode::RegenerateWorld()
 {
-	if ( bIsGameOver )
+	static size_t iterations = 0;
+	static const size_t MAX_ITER = 5;
+
+	for (auto planet : mPlanets)
 	{
-		return false;
+		planet->SetIcoIterations(iterations);
 	}
 
-	mScore += 100;
-	mHud->SetScore( mScore );
-
-	mAudio->PlaySound( mCheckpointReachedSound );
-	SpawnRandomCheckpoint();
-	mGame.GetGameTimers().AddTime( mGameTimer, 5.0f );
-
-	return true;
-}
-
-void GameMode::SpawnRandomCheckpoint()
-{
-	Vector3 shipPos = mShip->GetPosition();
-	Vector3 maxPos = Vector3( shipPos.x + 1000, shipPos.y + 1000, shipPos.z + 1000 );
-	Vector3 minPos = Vector3( shipPos.x - 1000, shipPos.y - 1000, shipPos.z - 1000 );
-	Vector3 checkpointPos = Random::GetVector( minPos, maxPos );
-
-	auto checkpoint = Checkpoint::Spawn( mGame );
-	checkpoint->SetPosition( checkpointPos );
-	mArrow->SetTarget( checkpointPos );
-}
-
-void GameMode::GameOver()
-{
-	bIsGameOver = true;
-	mHud->SetStatusText( "Game Over!" );
+	iterations = (iterations + 1) % MAX_ITER;
 }
 

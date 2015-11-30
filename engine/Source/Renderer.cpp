@@ -37,6 +37,8 @@ bool Renderer::Init(int width, int height)
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
 	// Create our SDL window
 	mWindow = SDL_CreateWindow("Lab 1: Asteroids 2D", 100, 100, width, height, 
@@ -50,6 +52,13 @@ bool Renderer::Init(int width, int height)
 
 	// Create an OpenGL context
 	mContext = SDL_GL_CreateContext(mWindow);
+
+	// Hint to OpenGL that we want multisampling (antialiasing)
+	glEnable(GL_MULTISAMPLE);
+	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST );
+	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST );
+	glEnable(GL_LINE_SMOOTH);
+	glEnable(GL_POLYGON_SMOOTH);
 	
 	// Start up GLEW to bind OpenGL functions
 	glewExperimental = GL_TRUE;
@@ -61,7 +70,6 @@ bool Renderer::Init(int width, int height)
 
 	// Glew may still post an error, so clear it...
 	glGetError();
-
 
 	mWidth = width;
 	mHeight = height;
@@ -134,13 +142,16 @@ void Renderer::DrawSprite(TexturePtr texture, const Matrix4& worldTransform)
 	DrawVertexArray(mSpriteVerts);
 }
 
-void Renderer::DrawBasicMesh(VertexArrayPtr vertArray, TexturePtr texture, const Matrix4& worldTransform)
+void Renderer::DrawBasicMesh(ShaderPtr shader, VertexArrayPtr vertArray, TexturePtr texture, const Matrix4& worldTransform)
 {
-    mBasicMeshShader->SetActive();
-    mBasicMeshShader->BindWorldTransform(worldTransform);
-    mBasicMeshShader->UploadUniformsToGPU();
-    
-    mBasicMeshShader->BindTexture("uTexture", texture, 0);
+	shader->SetActive();
+	shader->BindViewProjection(mView * mProj);
+	shader->BindCameraPosition(mCameraPos);
+	shader->BindWorldTransform(worldTransform);
+	shader->BindLightPosition(Vector3());
+	shader->BindLightColor(Vector3(1.0f, 1.0f, 1.0f));
+	shader->UploadUniformsToGPU();
+	shader->BindTexture("uTexture", texture, 0);
     
     DrawVertexArray(vertArray);
 }
@@ -154,7 +165,11 @@ void Renderer::DrawVertexArray(VertexArrayPtr vertArray)
 void Renderer::UpdateViewMatrix( const Matrix4& newMatrix )
 {
 	mView = newMatrix;
-	mBasicMeshShader->BindViewProjection( mView * mProj );
+}
+
+void Renderer::UpdateViewPos(const Vector3& newPos)
+{
+	mCameraPos = newPos;
 }
 
 Vector3 Renderer::Unproject( const Vector3& screenPoint ) const
@@ -241,16 +256,7 @@ bool Renderer::InitShaders()
 		static_cast<float>(mHeight), 1000.0f, -1000.0f);
 	mSpriteShader->BindViewProjection(mSpriteViewProj);
     
-    mBasicMeshShader = mGame.GetAssetCache().Load<Shader>("Shaders/BasicMesh");
-    if (!mBasicMeshShader)
-    {
-        SDL_Log("Failed to load basic mesh shader");
-        return false;
-    }
-    
-    mBasicMeshShader->SetActive();
 	mProj = Matrix4::CreatePerspectiveFOV( 1.22f, static_cast<float>(mWidth), static_cast<float>(mHeight), 25.0f, 10000.0f );
-	mBasicMeshShader->BindViewProjection( mProj );
 
 	return true;
 }

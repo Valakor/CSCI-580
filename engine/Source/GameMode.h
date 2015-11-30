@@ -11,7 +11,7 @@
 #include "AudioComponent.h"
 #include "HUD.h"
 #include "Ship.h"
-#include "Arrow.h"
+#include "Planet.h"
 #include "GameTimers.h"
 
 class GameMode : public Actor
@@ -21,27 +21,17 @@ public:
     GameMode(Game& game);
     
     virtual void BeginPlay() override;
-	virtual void Tick( float deltaTime ) override;
 
-	bool CheckpointReached();
-    
 private:
 
-	void SpawnRandomCheckpoint();
-	void GameOver();
+	std::vector<PlanetPtr> mPlanets;
+	void RegenerateWorld();
     
     AudioComponentPtr mAudio;
-    SoundPtr mCheckpointReachedSound;
 
     HUDPtr mHud;
 
 	ShipPtr mShip;
-	ArrowPtr mArrow;
-
-	TimerHandle mGameTimer;
-
-	int mScore;
-	bool bIsGameOver;
 };
 
 DECL_PTR(GameMode);

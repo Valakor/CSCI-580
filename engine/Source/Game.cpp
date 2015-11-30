@@ -1,16 +1,20 @@
 #include "Game.h"
+#include <cassert>
 #include <SDL/SDL.h>
 #include <SDL/SDL_mixer.h>
 #include <SDL/SDL_ttf.h>
 #include "Texture.h"
 #include "Random.h"
 
+Game* Game::sInstance = nullptr;
+
 Game::Game()
 	:mRenderer(*this)
 	,mAssetCache(*this, "Assets/")
 	,mShouldQuit(false)
 {
-
+	assert(!Game::sInstance);
+	Game::sInstance = this;
 }
 
 Game::~Game()
@@ -22,6 +26,9 @@ Game::~Game()
     Mix_CloseAudio();
 	TTF_Quit();
 	SDL_Quit();
+
+	assert(Game::sInstance);
+	Game::sInstance = nullptr;
 }
 
 bool Game::Init()
@@ -123,6 +130,7 @@ void Game::AddInputMappings()
 {
     mInput.AddActionMapping("Quit", SDLK_ESCAPE);
 	mInput.AddActionMapping("Recenter", 'r');
+	mInput.AddActionMapping("Regenerate", 'f');
     
     mInput.AddAxisMapping("Move", 'p', SDLK_SEMICOLON);
     mInput.AddAxisMapping("Yaw", 'd', 'a');

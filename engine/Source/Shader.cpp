@@ -7,20 +7,40 @@ Shader::Shader()
 	:mVertexShader( 0 )
 	, mFragmentShader( 0 )
 	, mShaderProgram( 0 )
+	, bIsInstance(false)
 {
 
 }
 
 Shader::~Shader()
 {
-	glDeleteProgram( mShaderProgram );
-	glDeleteShader( mVertexShader );
-	glDeleteShader( mFragmentShader );
+	if (!bIsInstance)
+	{
+		glDeleteProgram(mShaderProgram);
+		glDeleteShader(mVertexShader);
+		glDeleteShader(mFragmentShader);
+	}
 }
 
 void Shader::SetActive()
 {
 	glUseProgram( mShaderProgram );
+}
+
+void Shader::SetDefaultAttributes()
+{
+	mAmbientColor = Vector3(0.1f, 0.1f, 0.1f);
+	mEmissiveColor = Vector3(0, 0, 0);
+	mDiffuseColor = Vector3(1, 1, 1);
+	mSpecularColor = Vector3(1, 1, 1);
+	mSpecularPower = 16.0f;
+}
+
+ShaderPtr Shader::CreateShaderInstance()
+{
+	auto instance = std::make_shared<Shader>(*this);
+	instance->bIsInstance = true;
+	return instance;
 }
 
 void Shader::BindViewProjection( const Matrix4& viewProj )
@@ -35,20 +55,20 @@ void Shader::BindWorldTransform( const Matrix4& worldTransform )
 
 void Shader::UploadUniformsToGPU()
 {
-	//// Bind this buffer to index 0
-	//glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
-	//glBindBufferBase(GL_UNIFORM_BUFFER, 0, mUniformBuffer);
-	//
-	//// Copy uniform buffer data
-	//GLvoid* p = glMapBufferRange(GL_UNIFORM_BUFFER, 0, sizeof(mMatrixBlock),
-	//				 GL_MAP_INVALIDATE_BUFFER_BIT|GL_MAP_WRITE_BIT);
-	//memcpy(p, &mMatrixBlock, sizeof(mMatrixBlock));
-	//glUnmapBuffer(GL_UNIFORM_BUFFER);
-
 	GLuint view = glGetUniformLocation( mShaderProgram, "uViewProj" );
 	glUniformMatrix4fv( view, 1, GL_FALSE, mMatrixBlock.mViewProj.GetAsFloatPtr() );
 	GLuint world = glGetUniformLocation( mShaderProgram, "uWorldTransform" );
 	glUniformMatrix4fv( world, 1, GL_FALSE, mMatrixBlock.mWorldTransform.GetAsFloatPtr() );
+	
+	BindUniformVector3("EyePosW", cameraPos, 1.0f);
+	BindUniformVector3("LightPosW", lightPos, 1.0f);
+	BindUniformVector3("LightColor", lightColor, 1.0f);
+
+	BindUniformVector3("Ambient", mAmbientColor, 1.0f);
+	BindUniformVector3("MaterialEmissive", mEmissiveColor, 1.0f);
+	BindUniformVector3("MaterialDiffuse", mDiffuseColor, 1.0f);
+	BindUniformVector3("MaterialSpecular", mSpecularColor, 1.0f);
+	BindUniformFloat("MaterialShininess", mSpecularPower);
 }
 
 void Shader::BindTexture( const char* param, TexturePtr texture, int unit )
@@ -56,8 +76,39 @@ void Shader::BindTexture( const char* param, TexturePtr texture, int unit )
 	glActiveTexture( GL_TEXTURE0 );
 	texture->SetActive();
 
+	// We want to wrap textures
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
 	GLuint uniform = glGetUniformLocation( mShaderProgram, param );
 	glUniform1i( uniform, unit );
+}
+
+bool Shader::BindUniformVector3(const std::string& name, const Vector3& input, float w)
+{
+	int glLoc = glGetUniformLocation(mShaderProgram, name.c_str());
+	if (glLoc >= 0)
+	{
+		glUniform4f(glLoc, input.x, input.y, input.z, w);
+		return true;
+	}
+
+	return false;
+}
+
+bool Shader::BindUniformFloat(const std::string& name, float input)
+{
+	int glLoc = glGetUniformLocation(mShaderProgram, name.c_str());
+	if (glLoc >= 0)
+	{
+		glUniform1f(glLoc, input);
+		return true;
+	}
+
+	return false;
 }
 
 bool Shader::Load( const char* fileName, class AssetCache* cache )
@@ -127,17 +178,7 @@ bool Shader::Load( const char* fileName, class AssetCache* cache )
 		return false;
 	}
 
-	SetActive();
-
-	//// Now setup the uniform buffer object
-	//glGenBuffers(1, &mUniformBuffer);
-	//glBindBuffer(GL_UNIFORM_BUFFER, mUniformBuffer);
-	//glBufferData(GL_UNIFORM_BUFFER, sizeof(mMatrixBlock), &mMatrixBlock, GL_DYNAMIC_DRAW);
-
-	//// Bind it to the program
-	//GLuint block = glGetUniformBlockIndex(mShaderProgram, "MatrixBlock");
-	//glUniformBlockBinding(mShaderProgram, block, 0);
-	//glBindBufferBase(GL_UNIFORM_BUFFER, 0, mUniformBuffer);
+	SetDefaultAttributes();
 
 	return true;
 }
@@ -173,17 +214,5 @@ bool Shader::IsValidProgram()
 		return false;
 	}
 
-	//	glValidateProgram(mShaderProgram);
-	//	glGetProgramiv(mShaderProgram, GL_VALIDATE_STATUS, &status);
-	//	if (status != GL_TRUE)
-	//	{
-	//		glGetProgramInfoLog(mShaderProgram, 512, nullptr, buffer);
-	//		SDL_Log("GLSL Validate Status:\n%s", buffer);
-	//		// If this is just a warning, don't die
-	//		if (buffer[0] != 'W')
-	//		{
-	//			return false;
-	//		}
-	//	}
 	return true;
 }
