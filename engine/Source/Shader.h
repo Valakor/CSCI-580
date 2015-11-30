@@ -14,6 +14,7 @@ class Shader : public Asset
 	DECL_ASSET( Shader, Asset );
 public:
 	Shader();
+	Shader(const Shader&) = default;
 	virtual ~Shader();
 
 	void SetActive();
@@ -30,11 +31,11 @@ public:
 	void BindLightColor(const Vector3& color) { lightColor = color; }
 	void BindLightPosition(const Vector3& pos) { lightPos = pos; }
 
-	bool BindAmbientColor(const Vector3& ambient) { mAmbientColor = ambient; }
-	bool BindEmissiveColor(const Vector3& emissive) { mEmissiveColor = emissive; }
-	bool BindDiffuseColor(const Vector3& diffuse) { mDiffuseColor = diffuse; }
-	bool BindSpecularColor(const Vector3& specular) { mSpecularColor = specular; }
-	bool BindSpecPower(float power) { mSpecularPower = power; }
+	void BindAmbientColor(const Vector3& ambient) { mAmbientColor = ambient; }
+	void BindEmissiveColor(const Vector3& emissive) { mEmissiveColor = emissive; }
+	void BindDiffuseColor(const Vector3& diffuse) { mDiffuseColor = diffuse; }
+	void BindSpecularColor(const Vector3& specular) { mSpecularColor = specular; }
+	void BindSpecPower(float power) { mSpecularPower = power; }
 
 	void UploadUniformsToGPU();
 
@@ -43,7 +44,8 @@ public:
 
 	GLuint GetShaderProgram() const { return mShaderProgram; }
 protected:
-	bool BindUniformVector3(const std::string& name, const Vector3& input, float w);
+
+	bool BindUniformVector3(const std::string& name, const Vector3& input, float w = 1.0f);
 	bool BindUniformFloat(const std::string& name, float input);
 
 	bool Load( const char* fileName, class AssetCache* cache ) override;
@@ -71,6 +73,8 @@ private:
 	GLuint mVertexShader;
 	GLuint mFragmentShader;
 	GLuint mShaderProgram;
+
+	bool bIsInstance;
 };
 
 DECL_PTR( Shader );

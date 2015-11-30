@@ -7,15 +7,19 @@ Shader::Shader()
 	:mVertexShader( 0 )
 	, mFragmentShader( 0 )
 	, mShaderProgram( 0 )
+	, bIsInstance(false)
 {
 
 }
 
 Shader::~Shader()
 {
-	glDeleteProgram( mShaderProgram );
-	glDeleteShader( mVertexShader );
-	glDeleteShader( mFragmentShader );
+	if (!bIsInstance)
+	{
+		glDeleteProgram(mShaderProgram);
+		glDeleteShader(mVertexShader);
+		glDeleteShader(mFragmentShader);
+	}
 }
 
 void Shader::SetActive()
@@ -34,7 +38,9 @@ void Shader::SetDefaultAttributes()
 
 ShaderPtr Shader::CreateShaderInstance()
 {
-	return std::make_shared<Shader>(*this);
+	auto instance = std::make_shared<Shader>(*this);
+	instance->bIsInstance = true;
+	return instance;
 }
 
 void Shader::BindViewProjection( const Matrix4& viewProj )
