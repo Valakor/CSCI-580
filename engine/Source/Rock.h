@@ -1,28 +1,23 @@
 //
-//  Foliage.h
+//  Rock.h
 //  Game-mac
 //
-//  Created by Shazzy Gustafson on 11/14/15.
-//  Copyright © 2015 Sanjay Madhav. All rights reserved.
+//  Created by Shazzy Gustafson on 11/29/15.
+//  Copyright (c) 2015 Sanjay Madhav. All rights reserved.
 //
 
 #pragma once
 
-#include "ProceduralMesh.h"
-#include <map>
+#include "Actor.h"
 
-struct Rock : public MeshGenerator
+class Rock: public Actor
 {
-    Rock(size_t rockType) : mRockType(rockType) { }
-    virtual ~Rock() { }
+    DECL_ACTOR(Rock, Actor);
     
-    virtual void GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>& indices, std::vector<TexturePtr>& textures, float& radius) override;
+public:
     
-    size_t mRockType;
+    Rock(class Game& game);
     
-private:
-    GLuint AddVertex(Vertex vertex);
-    std::vector<Vertex>* mVerts;
-    std::vector<GLuint>* mIndices;
-    GLuint mCurrentIndex;
-   };
+};
+
+DECL_PTR(Rock);

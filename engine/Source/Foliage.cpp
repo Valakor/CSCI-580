@@ -80,29 +80,32 @@ void Foliage::createBranch(std::vector<GLuint>& indices)
     
     auto faces = std::vector<std::shared_ptr<TriIndices>>();
     //Bottom
-    faces.push_back(std::make_shared<TriIndices>(0, 1, 2));
-    faces.push_back(std::make_shared<TriIndices>(0, 2, 3));
-    faces.push_back(std::make_shared<TriIndices>(0, 3, 4));
+    faces.push_back(std::make_shared<TriIndices>(0, 2, 1));
+    faces.push_back(std::make_shared<TriIndices>(0, 3, 2));
+    faces.push_back(std::make_shared<TriIndices>(0, 4, 3));
     //Top
-    faces.push_back(std::make_shared<TriIndices>(5, 6, 7));
-    faces.push_back(std::make_shared<TriIndices>(5, 7, 8));
-    faces.push_back(std::make_shared<TriIndices>(5, 8, 9));
+    faces.push_back(std::make_shared<TriIndices>(5, 7, 6));
+    faces.push_back(std::make_shared<TriIndices>(5, 8, 7));
+    faces.push_back(std::make_shared<TriIndices>(5, 9, 8));
     
     //Trunk
-    faces.push_back(std::make_shared<TriIndices>(3, 9, 8));
-    faces.push_back(std::make_shared<TriIndices>(3, 9, 4));
     
-    faces.push_back(std::make_shared<TriIndices>(4, 5, 9));
-    faces.push_back(std::make_shared<TriIndices>(4, 5, 0));
     
-    faces.push_back(std::make_shared<TriIndices>(0, 6, 5));
+    faces.push_back(std::make_shared<TriIndices>(0, 5, 6));
     faces.push_back(std::make_shared<TriIndices>(0, 6, 1));
     
-    faces.push_back(std::make_shared<TriIndices>(2, 6, 7));
-    faces.push_back(std::make_shared<TriIndices>(2, 6, 1));
+    faces.push_back(std::make_shared<TriIndices>(1, 6, 7));
+    faces.push_back(std::make_shared<TriIndices>(1, 7, 2));
     
-    faces.push_back(std::make_shared<TriIndices>(2, 3, 8));
-    faces.push_back(std::make_shared<TriIndices>(8, 7, 2));
+    faces.push_back(std::make_shared<TriIndices>(2, 7, 8));
+    faces.push_back(std::make_shared<TriIndices>(2, 8, 3));
+    
+    faces.push_back(std::make_shared<TriIndices>(3, 8, 9));
+    faces.push_back(std::make_shared<TriIndices>(3, 9, 4));
+    
+    faces.push_back(std::make_shared<TriIndices>(4, 9, 5));
+    faces.push_back(std::make_shared<TriIndices>(4, 5, 0));
+
     
     // finalize index buffer
     for (auto tri : faces)
@@ -139,7 +142,7 @@ void Foliage::createPyramid(std::vector<GLuint>& indices, float scale, Vector3 p
     auto faces = std::vector<std::shared_ptr<TriIndices>>();
     //Plane
     faces.push_back(std::make_shared<TriIndices>(0 + offset, 1 + offset, 3 + offset));
-    faces.push_back(std::make_shared<TriIndices>(1 + offset, 3 + offset, 2 + offset));
+    faces.push_back(std::make_shared<TriIndices>(1 + offset, 2 + offset, 3 + offset));
     //TreeTop
     faces.push_back(std::make_shared<TriIndices>(0 + offset, 1 + offset, 4 + offset));
     faces.push_back(std::make_shared<TriIndices>(1 + offset, 2 + offset, 4 + offset));

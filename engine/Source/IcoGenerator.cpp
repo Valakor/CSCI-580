@@ -120,7 +120,7 @@ void IcoGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>&
 	}
 
 	// we want flat shading, so we need to duplicate verts and use surface normals
-	std::vector<Vertex> newVerts;
+/*	std::vector<Vertex> newVerts;
 	std::vector<GLuint> newIndices;
 	newVerts.reserve(indices.size());
 	newIndices.reserve(indices.size());
@@ -150,13 +150,13 @@ void IcoGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>&
 	}
 
 	verts = std::move(newVerts);
-	indices = std::move(newIndices);
+	indices = std::move(newIndices);*/
 }
 
 // Adds vertex to our list of vertices. Normalizes the position to be on the unit sphere
 // and uses this vector as the normal at the vertex as well. Returns the index of the new
 // vertex.
-GLuint IcoGenerator::AddVertex(Vertex vertex)
+GLuint IcoGenerator::AddVertex(Vertex &vertex)
 {
 	// Positions are being calculated on the unit sphere, so they should be normalized
 	vertex.mPos.Normalize();

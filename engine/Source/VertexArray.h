@@ -46,6 +46,7 @@ class VertexArray
 public:
 	static VertexArrayPtr Create(const Vertex* verts, size_t vertCount, const GLuint* indices, size_t indexCount);
 	VertexArray(const Vertex* verts, size_t vertCount, const GLuint* indices, size_t indexCount);
+    void calculateNormals(std::vector<Vertex>  & verts, std::vector<GLuint>  & indices);
 public:
 	~VertexArray();
 	void SetActive();

@@ -10,9 +10,13 @@ VertexArray::VertexArray(const Vertex* verts, size_t vertCount, const GLuint* in
 {
 	mVerts.assign(verts, verts + vertCount);
 	mIndices.assign(indices, indices + indexCount);
+    
 
-	mVertexCount = vertCount;
-	mIndexCount = indexCount;
+    calculateNormals(mVerts, mIndices);
+    mVertexCount = mVerts.size();//vertCount;
+    mIndexCount = mIndices.size();//indexCount;
+    vertCount= mVertexCount;
+    indexCount = mIndexCount;
 
 	// Create vertex array
 	glGenVertexArrays(1, &mVertexArray);
@@ -54,3 +58,41 @@ void VertexArray::SetActive()
 	glBindVertexArray(mVertexArray);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mIndexBuffer);
 }
+
+void VertexArray::calculateNormals(std::vector<Vertex>  & verts, std::vector<GLuint>  & indices)
+{
+    std::vector<Vertex> newVerts;
+    std::vector<GLuint> newIndices;
+    newVerts.reserve(indices.size());
+    newIndices.reserve(indices.size());
+    
+    for (int i = 0; i < indices.size(); i += 3)
+    {
+        Vertex v1 = verts[indices[i]];
+        Vertex v2 = verts[indices[i+1]];
+        Vertex v3 = verts[indices[i+2]];
+        
+        Vector3 v12 = v2.mPos - v1.mPos;
+        Vector3 v13 = v3.mPos - v1.mPos;
+        
+        Vector3 n = Cross(v12, v13);
+        n.Normalize();
+        
+        v1.mNormal = n;
+        v2.mNormal = n;
+        v3.mNormal = n;
+        
+        newVerts.push_back(v1);
+        newVerts.push_back(v2);
+        newVerts.push_back(v3);
+        newIndices.push_back(i);
+        newIndices.push_back(i+1);
+        newIndices.push_back(i+2);
+    }
+    
+    verts = std::move(newVerts);
+    indices = std::move(newIndices);
+    
+    
+}
+
