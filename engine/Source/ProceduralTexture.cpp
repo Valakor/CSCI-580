@@ -18,6 +18,7 @@ bool ProceduralTexture::Load(const char* fileName, class AssetCache* cache)
     channels = 3;
     int octaves = 8;
 	image = new unsigned char[mWidth*mHeight*channels];
+    PerlinNoise pnoise;
     
     int kk = 0;
     for (int y=0; y < mHeight; y++)
@@ -30,7 +31,7 @@ bool ProceduralTexture::Load(const char* fileName, class AssetCache* cache)
             
             for (int o=0; o < octaves; ++o)
             {
-                float add = PerlinNoise::Noise(4*x_f * (1 << o), 4*y_f * (1 << o), 0.8 * ( 1 << o));
+                float add = pnoise.Noise(4*x_f * (1 << o), 4*y_f * (1 << o), 0.8 * ( 1 << o));
                 
                 if ( add > 0)
                 {

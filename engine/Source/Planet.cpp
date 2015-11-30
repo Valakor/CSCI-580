@@ -11,6 +11,8 @@
 #include "ProceduralMesh.h"
 #include "IcoGenerator.h"
 #include "Shader.h"
+#include "PerlinNoise.h"
+#include "Random.h"
 
 IMPL_ACTOR(Planet, Actor);
 
@@ -22,6 +24,26 @@ Planet::Planet(Game& game) : Super(game)
 	SetScale(30.f);
 }
 
+void Deform(std::vector<Vertex>& verts)
+{
+    // deform based on perlin noise
+    static const float MaxDeformation = 0.2f;
+    PerlinNoise pnoise;
+    for (auto& v : verts)
+    {
+        // [0, 1]
+        double noise = pnoise.NoiseSample(v.mPos.x, v.mPos.y, v.mPos.z, 8, false);
+        
+        // [-1, 1]
+        noise = (noise - 0.5f) * 2.0f;
+        auto vv = noise * v.mNormal * MaxDeformation;
+        v.mPos += vv;
+        auto vv_mag = vv.Length();
+        v.mTexCoord.x = fmin(vv_mag*3, 1.0f);
+        v.mTexCoord.y = (1.0f - fmin(vv_mag*3, 1.0f));
+    }
+}
+
 void Planet::SetIcoIterations(size_t iterations)
 {
 	if (iterations == mCurrentIterations) return;
@@ -29,7 +51,7 @@ void Planet::SetIcoIterations(size_t iterations)
 	mCurrentIterations = iterations;
 
 	// Create a new mesh with the new iteration count
-	auto meshPtr = ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(iterations));
+    auto meshPtr = ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(iterations, Deform, "Textures/EarthGradient.png"));
 	mMesh->SetMesh(meshPtr);
 
 	// Get the shader we want for planets
