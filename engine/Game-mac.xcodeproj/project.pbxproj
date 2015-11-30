@@ -37,12 +37,12 @@
 		D11087731C03E14500EAB959 /* IcoGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D11087721C03E14500EAB959 /* IcoGenerator.cpp */; };
 		D11532451C043A18002B659A /* PerlinNoise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D11532431C043A18002B659A /* PerlinNoise.cpp */; };
 		D11532461C043A18002B659A /* ProceduralTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D11532441C043A18002B659A /* ProceduralTexture.cpp */; };
-		D144BA7F1C041C250068183F /* ShaderCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D144BA7D1C041C250068183F /* ShaderCache.cpp */; };
 		D14A82011B6EABAB0084E3FD /* Sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D14A81FF1B6EABAB0084E3FD /* Sound.cpp */; };
 		D14A82081B6EB7D50084E3FD /* Asteroid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D14A82021B6EB7D50084E3FD /* Asteroid.cpp */; };
 		D14A820A1B6EB7D50084E3FD /* Ship.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D14A82061B6EB7D50084E3FD /* Ship.cpp */; };
 		D14A820D1B6EB85D0084E3FD /* AudioComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D14A820B1B6EB85D0084E3FD /* AudioComponent.cpp */; };
 		D14A82101B6ECD890084E3FD /* InputComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D14A820E1B6ECD890084E3FD /* InputComponent.cpp */; };
+		D1995C541C0C50EC00CA8B82 /* Planet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1995C531C0C50EC00CA8B82 /* Planet.cpp */; };
 		D19C8ECA1B6EF72400129DC6 /* MeshComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D19C8EC81B6EF72400129DC6 /* MeshComponent.cpp */; };
 		D1E0CC721BEE98E1004A995A /* CameraComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1E0CC6B1BEE98E1004A995A /* CameraComponent.cpp */; };
 		D1E0CC731BEE98E1004A995A /* Checkpoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1E0CC6C1BEE98E1004A995A /* Checkpoint.cpp */; };
@@ -117,8 +117,6 @@
 		D11532441C043A18002B659A /* ProceduralTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProceduralTexture.cpp; sourceTree = "<group>"; };
 		D11532471C043A27002B659A /* PerlinNoise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PerlinNoise.h; sourceTree = "<group>"; };
 		D11532481C043A27002B659A /* ProceduralTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProceduralTexture.h; sourceTree = "<group>"; };
-		D144BA7D1C041C250068183F /* ShaderCache.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderCache.cpp; sourceTree = "<group>"; };
-		D144BA7E1C041C250068183F /* ShaderCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderCache.h; sourceTree = "<group>"; };
 		D14A81FF1B6EABAB0084E3FD /* Sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Sound.cpp; sourceTree = "<group>"; };
 		D14A82001B6EABAB0084E3FD /* Sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sound.h; sourceTree = "<group>"; };
 		D14A82021B6EB7D50084E3FD /* Asteroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Asteroid.cpp; sourceTree = "<group>"; };
@@ -129,6 +127,8 @@
 		D14A820C1B6EB85D0084E3FD /* AudioComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioComponent.h; sourceTree = "<group>"; };
 		D14A820E1B6ECD890084E3FD /* InputComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputComponent.cpp; sourceTree = "<group>"; };
 		D14A820F1B6ECD890084E3FD /* InputComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputComponent.h; sourceTree = "<group>"; };
+		D1995C531C0C50EC00CA8B82 /* Planet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Planet.cpp; sourceTree = "<group>"; };
+		D1995C551C0C50FC00CA8B82 /* Planet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Planet.h; sourceTree = "<group>"; };
 		D19C8EC81B6EF72400129DC6 /* MeshComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshComponent.cpp; sourceTree = "<group>"; };
 		D19C8EC91B6EF72400129DC6 /* MeshComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshComponent.h; sourceTree = "<group>"; };
 		D1E0CC641BEE98D2004A995A /* CameraComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraComponent.h; sourceTree = "<group>"; };
@@ -222,12 +222,12 @@
 				92E46E571B634F950035CD21 /* ObjectMacros.h */,
 				D11532471C043A27002B659A /* PerlinNoise.h */,
 				92E46E581B634F950035CD21 /* PhysWorld.h */,
+				D1995C551C0C50FC00CA8B82 /* Planet.h */,
 				D11087711C03E13800EAB959 /* ProceduralMesh.h */,
 				D11532481C043A27002B659A /* ProceduralTexture.h */,
 				92E46E591B634F950035CD21 /* Random.h */,
 				92E46E5A1B634F950035CD21 /* Renderer.h */,
 				92E46E5B1B634F950035CD21 /* Shader.h */,
-				D144BA7E1C041C250068183F /* ShaderCache.h */,
 				D14A82071B6EB7D50084E3FD /* Ship.h */,
 				D14A82001B6EABAB0084E3FD /* Sound.h */,
 				92E46E5D1B634F950035CD21 /* SphereCollision.h */,
@@ -271,12 +271,12 @@
 				92E46E701B634FCA0035CD21 /* Object.cpp */,
 				D11532431C043A18002B659A /* PerlinNoise.cpp */,
 				92E46E711B634FCA0035CD21 /* PhysWorld.cpp */,
+				D1995C531C0C50EC00CA8B82 /* Planet.cpp */,
 				D110876E1C03E12D00EAB959 /* ProceduralMesh.cpp */,
 				D11532441C043A18002B659A /* ProceduralTexture.cpp */,
 				92E46E721B634FCA0035CD21 /* Random.cpp */,
 				92E46E731B634FCA0035CD21 /* Renderer.cpp */,
 				92E46E741B634FCA0035CD21 /* Shader.cpp */,
-				D144BA7D1C041C250068183F /* ShaderCache.cpp */,
 				D14A82061B6EB7D50084E3FD /* Ship.cpp */,
 				D14A81FF1B6EABAB0084E3FD /* Sound.cpp */,
 				92E46E761B634FCA0035CD21 /* SphereCollision.cpp */,
@@ -379,12 +379,12 @@
 				D14A82011B6EABAB0084E3FD /* Sound.cpp in Sources */,
 				92E46E8B1B634FCA0035CD21 /* Renderer.cpp in Sources */,
 				D1E0CC741BEE98E1004A995A /* Font.cpp in Sources */,
-				D144BA7F1C041C250068183F /* ShaderCache.cpp in Sources */,
 				D14A820A1B6EB7D50084E3FD /* Ship.cpp in Sources */,
 				92E46E811B634FCA0035CD21 /* DrawComponent.cpp in Sources */,
 				92D5631F1B673D5500E689CE /* GameTimers.cpp in Sources */,
 				92E46E821B634FCA0035CD21 /* FrameTimer.cpp in Sources */,
 				92E46E8C1B634FCA0035CD21 /* Shader.cpp in Sources */,
+				D1995C541C0C50EC00CA8B82 /* Planet.cpp in Sources */,
 				D110876F1C03E12D00EAB959 /* ProceduralMesh.cpp in Sources */,
 				92E46E7F1B634FCA0035CD21 /* CollisionComponent.cpp in Sources */,
 				92E46E851B634FCA0035CD21 /* Main.cpp in Sources */,
