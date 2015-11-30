@@ -18,6 +18,10 @@ public:
 
 	void SetActive();
 
+	void SetDefaultAttributes();
+
+	std::shared_ptr<Shader> CreateShaderInstance();
+
 	// NOTE: Bind functions assume that this shader is active
 	void BindViewProjection( const Matrix4& viewProj );
 	void BindWorldTransform( const Matrix4& worldTransform );
@@ -26,13 +30,11 @@ public:
 	void BindLightColor(const Vector3& color) { lightColor = color; }
 	void BindLightPosition(const Vector3& pos) { lightPos = pos; }
 
-	bool BindUniformVector3(const std::string& name, const Vector3& input, float w);
-	bool BindUniformFloat(const std::string& name, float input);
-	bool BindAmbientColor(const Vector3& ambient);
-	bool BindEmissiveColor(const Vector3& emissive);
-	bool BindDiffuseColor(const Vector3& diffuse);
-	bool BindSpecularColor(const Vector3& specular);
-	bool BindSpecPower(float power);
+	bool BindAmbientColor(const Vector3& ambient) { mAmbientColor = ambient; }
+	bool BindEmissiveColor(const Vector3& emissive) { mEmissiveColor = emissive; }
+	bool BindDiffuseColor(const Vector3& diffuse) { mDiffuseColor = diffuse; }
+	bool BindSpecularColor(const Vector3& specular) { mSpecularColor = specular; }
+	bool BindSpecPower(float power) { mSpecularPower = power; }
 
 	void UploadUniformsToGPU();
 
@@ -41,6 +43,9 @@ public:
 
 	GLuint GetShaderProgram() const { return mShaderProgram; }
 protected:
+	bool BindUniformVector3(const std::string& name, const Vector3& input, float w);
+	bool BindUniformFloat(const std::string& name, float input);
+
 	bool Load( const char* fileName, class AssetCache* cache ) override;
 	bool IsCompiled( GLuint shader );
 	bool IsValidProgram();
@@ -57,10 +62,15 @@ private:
 	Vector3 lightColor;
 	Vector3 lightPos;
 
+	Vector3 mAmbientColor;
+	Vector3 mEmissiveColor;
+	Vector3 mDiffuseColor;
+	Vector3 mSpecularColor;
+	float mSpecularPower;
+
 	GLuint mVertexShader;
 	GLuint mFragmentShader;
 	GLuint mShaderProgram;
-	GLuint mUniformBuffer;
 };
 
 DECL_PTR( Shader );

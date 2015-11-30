@@ -11,6 +11,7 @@
 #include "AudioComponent.h"
 #include "HUD.h"
 #include "Ship.h"
+#include "Planet.h"
 #include "GameTimers.h"
 
 class GameMode : public Actor
@@ -23,7 +24,7 @@ public:
 
 private:
 
-	std::vector<ActorPtr> mProceduralActors;
+	std::vector<PlanetPtr> mPlanets;
 	void RegenerateWorld();
     
     AudioComponentPtr mAudio;

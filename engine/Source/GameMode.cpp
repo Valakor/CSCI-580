@@ -10,11 +10,6 @@
 #include "Game.h"
 #include "Asteroid.h"
 #include "Random.h"
-#include "Checkpoint.h"
-#include "MeshComponent.h"
-#include "ProceduralMesh.h"
-#include "IcoGenerator.h"
-#include <cfloat>
 
 IMPL_ACTOR(GameMode, Actor);
 
@@ -46,7 +41,18 @@ void GameMode::BeginPlay()
 	// Spawn ship
 	mShip = Ship::Spawn( mGame );
 
-	// Spawn a couple procedural mesh actors
+	// Create a couple planets
+	static const size_t NUM_PLANETS = 4;
+	static const float RADIUS = 150.0f;
+	float angle = 0.0f;
+	for (int i = 0; i < NUM_PLANETS; ++i)
+	{
+		auto planet = Planet::Spawn(mGame);
+		planet->SetPosition(Vector3(RADIUS * Math::Cos(angle), RADIUS * Math::Sin(angle), 0.0f));
+		mPlanets.push_back(planet);
+
+		angle += Math::TwoPi / NUM_PLANETS;
+	}
 	RegenerateWorld();
 	mGame.GetInput().BindAction("Regenerate", InputEvent::IE_Pressed, this, &GameMode::RegenerateWorld);
 }
@@ -55,27 +61,10 @@ void GameMode::RegenerateWorld()
 {
 	static size_t iterations = 0;
 	static const size_t MAX_ITER = 5;
-	static const size_t NUM_ICOS = 4;
-	static const float RADIUS = 150.0f;
 
-	for (auto actor : mProceduralActors)
+	for (auto planet : mPlanets)
 	{
-		actor->SetIsAlive(false);
-	}
-	mProceduralActors.clear();
-
-	float angle = 0.0f;
-	for (int i = 0; i < NUM_ICOS; ++i)
-	{
-		auto actor = Actor::Spawn(mGame);
-		auto meshComp = MeshComponent::Create(*(actor.get()));
-		auto procMesh = ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(iterations));
-		meshComp->SetMesh(procMesh);
-		actor->SetScale(30.f);
-		actor->SetPosition(Vector3(RADIUS * Math::Cos(angle), RADIUS * Math::Sin(angle), 0.0f));
-		mProceduralActors.push_back(actor);
-
-		angle += Math::TwoPi / NUM_ICOS;
+		planet->SetIcoIterations(iterations);
 	}
 
 	iterations = (iterations + 1) % MAX_ITER;

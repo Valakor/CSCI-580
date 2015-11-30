@@ -28,7 +28,7 @@ public:
 	int GetHeight() const { return mHeight; }
 
 	void DrawSprite(TexturePtr texture, const Matrix4& worldTransform);
-    void DrawBasicMesh(VertexArrayPtr vertArray, TexturePtr texture, const Matrix4& worldTransform);
+    void DrawBasicMesh(ShaderPtr shader, VertexArrayPtr vertArray, TexturePtr texture, const Matrix4& worldTransform);
 	void DrawVertexArray(VertexArrayPtr vertArray);
 
 	void UpdateViewMatrix( const Matrix4& newMatrix );
@@ -68,5 +68,4 @@ private:
 
 	Vector3 mCameraPos;
 
-    ShaderPtr mBasicMeshShader;
 };

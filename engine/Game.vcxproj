@@ -40,6 +40,7 @@
     <ClInclude Include="Source\ObjectMacros.h" />
     <ClInclude Include="Source\PerlinNoise.h" />
     <ClInclude Include="Source\PhysWorld.h" />
+    <ClInclude Include="Source\Planet.h" />
     <ClInclude Include="Source\ProceduralMesh.h" />
     <ClInclude Include="Source\Random.h" />
     <ClInclude Include="Source\Renderer.h" />
@@ -81,6 +82,7 @@
     <ClCompile Include="Source\Object.cpp" />
     <ClCompile Include="Source\PerlinNoise.cpp" />
     <ClCompile Include="Source\PhysWorld.cpp" />
+    <ClCompile Include="Source\Planet.cpp" />
     <ClCompile Include="Source\ProceduralMesh.cpp" />
     <ClCompile Include="Source\Random.cpp" />
     <ClCompile Include="Source\Renderer.cpp" />

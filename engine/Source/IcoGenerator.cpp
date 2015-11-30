@@ -21,6 +21,7 @@ struct TriIndices
 void IcoGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>& indices, std::vector<TexturePtr>& textures, float& radius)
 {
 	radius = 1.0f;
+	textures.push_back(Game::Get().GetAssetCache().Load<Texture>("Textures/EarthGradient.png"));
 
 	mVerts = &verts;
 	mIndices = &indices;
