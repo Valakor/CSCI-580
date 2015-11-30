@@ -38,12 +38,12 @@
     <ClInclude Include="Source\MoveComponent.h" />
     <ClInclude Include="Source\Object.h" />
     <ClInclude Include="Source\ObjectMacros.h" />
+    <ClInclude Include="Source\PerlinNoise.h" />
     <ClInclude Include="Source\PhysWorld.h" />
     <ClInclude Include="Source\ProceduralMesh.h" />
     <ClInclude Include="Source\Random.h" />
     <ClInclude Include="Source\Renderer.h" />
     <ClInclude Include="Source\Shader.h" />
-    <ClInclude Include="Source\ShaderCache.h" />
     <ClInclude Include="Source\Ship.h" />
     <ClInclude Include="Source\Sound.h" />
     <ClInclude Include="Source\SphereCollision.h" />
@@ -79,12 +79,12 @@
     <ClCompile Include="Source\MeshComponent.cpp" />
     <ClCompile Include="Source\MoveComponent.cpp" />
     <ClCompile Include="Source\Object.cpp" />
+    <ClCompile Include="Source\PerlinNoise.cpp" />
     <ClCompile Include="Source\PhysWorld.cpp" />
     <ClCompile Include="Source\ProceduralMesh.cpp" />
     <ClCompile Include="Source\Random.cpp" />
     <ClCompile Include="Source\Renderer.cpp" />
     <ClCompile Include="Source\Shader.cpp" />
-    <ClCompile Include="Source\ShaderCache.cpp" />
     <ClCompile Include="Source\Ship.cpp" />
     <ClCompile Include="Source\Sound.cpp" />
     <ClCompile Include="Source\SphereCollision.cpp" />

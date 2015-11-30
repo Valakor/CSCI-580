@@ -2,7 +2,6 @@
 #include <fstream>
 #include <sstream>
 #include <SDL/SDL.h>
-#include "ShaderCache.h"
 
 Shader::Shader()
 	:mVertexShader( 0 )
@@ -178,13 +177,6 @@ bool Shader::Load( const char* fileName, class AssetCache* cache )
 	if ( !IsValidProgram() )
 	{
 		SDL_Log( "Shader program %s is invalid.", fileName );
-		return false;
-	}
-
-	// add to the game shader cache
-	if (!ShaderCache::Get().RegisterShader(fileName, ThisPtr()))
-	{
-		SDL_Log("Shader program %s already registered in shader cache.", fileName);
 		return false;
 	}
 
