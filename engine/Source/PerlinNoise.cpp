@@ -9,6 +9,8 @@
 #include "PerlinNoise.h"
 #include "Math.h"
 #include <random>
+#include <numeric>
+#include <algorithm>
 #include "Random.h"
 
 #define FADE(t) ((t) * (t) * (t) * ((t) * ((t) * 6 - 15) + 10))

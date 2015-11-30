@@ -11,6 +11,7 @@
 
 #include "ProceduralMesh.h"
 #include <map>
+#include <functional>
 
 typedef std::function<void(std::vector<Vertex>&)> DeformationFunction;
 
