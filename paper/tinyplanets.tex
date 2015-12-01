@@ -1,0 +1,70 @@
+\documentclass[a4paper,twoside]{article}
+
+\usepackage{epsfig}
+\usepackage{subfigure}
+\usepackage{calc}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{multicol}
+\usepackage{pslatex}
+\usepackage{apalike}
+\usepackage{graphicx}
+\usepackage{algorithmic}
+\usepackage{textcomp}
+\usepackage{SCITEPRESS}     % Please add other packages that you may need BEFORE the SCITEPRESS.sty package.
+
+\subfigtopskip=0pt
+\subfigcapskip=0pt
+\subfigbottomskip=0pt
+
+\begin{document}
+
+\title{Tiny Planets}
+
+\author{\authorname{Sharzard Gustafson, Matthew Pohlmann, Ricardo Sisnett}
+\affiliation{University of Southern California, Los Angeles, USA.}
+\email{\{sagustaf, pohlmann, sisnetth\}@usc.edu}
+}
+
+\keywords{Procedural Generation, Graphics}
+
+\abstract{ In this paper we present a method of procedurally generating planetary models with geography by using multi-fractal Perlin noise and recursive icospheres. ... placement of  trees and ..., also procedurally modeled, ... }
+
+\onecolumn \maketitle \normalsize \vfill
+
+\section{\uppercase{Introduction}}
+\label{sec:introduction}
+
+\section{\uppercase{IcoSpheres}}
+\label{sec:icosphere}
+\noindent An icosphere is ... The following algorithm takes a set of points representing an icosaedron and...
+
+[Figure. Recursive Icosphere algorithm]
+
+\section{\uppercase{Perlin Noise}}
+\label{sec:pnoise}
+\noindent Ken Perlin's algorithm for creating pseudo-random noise is a staple in any application trying to replicate natural occurring patterns. 
+
+[Figure. Perlin Noise Texture]
+
+\subsection{Multi Fractal Perlin Noise}
+\label{sec:mfpnois}
+Classical Perlin noise is homogeneous and isotropic, this plays against the rationale to use Perlin noise: creating natural occurring patterns.  As defined in [REF] a \textit{multifractal} is a heterogeneous fractal, this is achieved by parameterizing the dimension of the fractal function with another attribute, such as the height value of the terrain. The algorithm used for this work is described in [figure].
+
+[Figure. Multifractal algorithm]
+
+\section{\uppercase{Terrain Generation}}
+\label{sec:tgeneration}
+
+[Figure. Terran deformation algorithm]
+
+[Figure. Iterations on planet deformation]
+
+\section{\uppercase{Results}}
+\label{sec:results}
+
+\vfill
+\end{document}
+
