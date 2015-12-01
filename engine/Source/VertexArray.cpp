@@ -32,13 +32,20 @@ VertexArray::VertexArray(const Vertex* verts, size_t vertCount, const GLuint* in
 	// Position is 3 floats starting at offset 0
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+
 	// Normal is 3 floats starting at offset of mNormal
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
 		reinterpret_cast<void*>(offsetof(Vertex, mNormal)));
-	// TexCoord is 2 floats starting at offset of mTexCoord
+
+	// Color is 3 floats starting at offset of mNormal
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), 
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+		reinterpret_cast<void*>(offsetof(Vertex, mColor)));
+
+	// TexCoord is 2 floats starting at offset of mColor
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
 		reinterpret_cast<void*>(offsetof(Vertex, mTexCoord)));
 }
 

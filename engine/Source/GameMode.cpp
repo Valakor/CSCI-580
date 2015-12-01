@@ -43,7 +43,7 @@ void GameMode::BeginPlay()
 
 	// Create a couple planets
 	static const size_t NUM_PLANETS = 4;
-	static const float RADIUS = 150.0f;
+	static const float RADIUS = 700.0f;
 	float angle = 0.0f;
 	for (int i = 0; i < NUM_PLANETS; ++i)
 	{
@@ -53,20 +53,24 @@ void GameMode::BeginPlay()
 
 		angle += Math::TwoPi / NUM_PLANETS;
 	}
-	RegenerateWorld();
-	mGame.GetInput().BindAction("Regenerate", InputEvent::IE_Pressed, this, &GameMode::RegenerateWorld);
+	RegenerateWorld(0);
+
+	// Add generation input bindings
+	mGame.GetInput().BindAction("Regenerate0", InputEvent::IE_Pressed, this, &GameMode::RegenerateLevel0);
+	mGame.GetInput().BindAction("Regenerate1", InputEvent::IE_Pressed, this, &GameMode::RegenerateLevel1);
+	mGame.GetInput().BindAction("Regenerate2", InputEvent::IE_Pressed, this, &GameMode::RegenerateLevel2);
+	mGame.GetInput().BindAction("Regenerate3", InputEvent::IE_Pressed, this, &GameMode::RegenerateLevel3);
+	mGame.GetInput().BindAction("Regenerate4", InputEvent::IE_Pressed, this, &GameMode::RegenerateLevel4);
+	mGame.GetInput().BindAction("Regenerate5", InputEvent::IE_Pressed, this, &GameMode::RegenerateLevel5);
+	mGame.GetInput().BindAction("Regenerate6", InputEvent::IE_Pressed, this, &GameMode::RegenerateLevel6);
+	mGame.GetInput().BindAction("Regenerate7", InputEvent::IE_Pressed, this, &GameMode::RegenerateLevel7);
 }
 
-void GameMode::RegenerateWorld()
+void GameMode::RegenerateWorld(int icoIterations)
 {
-	static size_t iterations = 0;
-	static const size_t MAX_ITER = 5;
-
-	for (auto planet : mPlanets)
+	for (int i = 0; i < mPlanets.size(); ++i)
 	{
-		planet->SetIcoIterations(iterations);
+		mPlanets[i]->SetIcoIterations(icoIterations, i);
 	}
-
-	iterations = (iterations + 1) % MAX_ITER;
 }
 

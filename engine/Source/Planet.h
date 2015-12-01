@@ -17,12 +17,18 @@ class Planet : public Actor
     
     MeshComponentPtr mMesh;
 	size_t mCurrentIterations;
+
+	MeshComponentPtr mWaterMesh;
+
+	int mPerlinSeed;
+
+	void Deform(std::vector<Vertex>& verts);
     
 public:
     
 	Planet(class Game& game);
 
-	void SetIcoIterations(size_t iterations);
+	void SetIcoIterations(size_t iterations, int perlinSeed);
 };
 
 DECL_PTR(Planet);

@@ -12,49 +12,76 @@
 #include "IcoGenerator.h"
 #include "Shader.h"
 #include "PerlinNoise.h"
-#include "Random.h"
+#include <functional>
 
 IMPL_ACTOR(Planet, Actor);
+
+std::vector<Vector3> gColor = {
+	Vector3(0.9f, 0.9f, 0.7f), // Beach
+	Vector3(0.0f, 1.0f, 0.0f), // Grass
+	Vector3(0.4f, 0.4f, 0.3f), // Rocks
+	Vector3(0.4f, 0.4f, 0.3f), // Rocks
+	Vector3(0.4f, 0.4f, 0.3f), // Rocks
+	Vector3(1.0f, 1.0f, 1.0f), // Snow
+	Vector3(1.0f, 1.0f, 1.0f), // Snow
+	Vector3(1.0f, 1.0f, 1.0f), // Snow
+	Vector3(1.0f, 1.0f, 1.0f), // Snow
+	Vector3(1.0f, 1.0f, 1.0f), // Snow
+	Vector3(1.0f, 1.0f, 1.0f), // Snow
+	Vector3(1.0f, 1.0f, 1.0f), // Snow
+	Vector3(1.0f, 1.0f, 1.0f), // Snow
+	Vector3(1.0f, 1.0f, 1.0f), // Snow
+	Vector3(1.0f, 1.0f, 1.0f), // Snow
+	Vector3(1.0f, 1.0f, 1.0f)  // Snow
+};
 
 Planet::Planet(Game& game) : Super(game)
 {
 	mCurrentIterations = -1;
     mMesh = MeshComponent::Create(*this);
-	SetIcoIterations(mCurrentIterations);
-	SetScale(30.f);
+	mWaterMesh = MeshComponent::Create(*this);
+	SetIcoIterations(mCurrentIterations, -1);
+	SetScale(200.f);
 }
 
-void Deform(std::vector<Vertex>& verts)
+void Planet::Deform(std::vector<Vertex>& verts)
 {
     // deform based on perlin noise
-    static const float MaxDeformation = 0.2f;
-    PerlinNoise pnoise;
+    static const float MaxDeformation = 0.5f;
+    PerlinNoise pnoise(mPerlinSeed);
     for (auto& v : verts)
     {
         // [0, 1]
-        double noise = pnoise.NoiseSample(v.mPos.x, v.mPos.y, v.mPos.z, 8, false);
-        
-        // [-1, 1]
-        noise = (noise - 0.5f) * 2.0f;
-        auto vv = noise * v.mNormal * MaxDeformation;
-        v.mPos += vv;
-        auto vv_mag = vv.Length();
-        v.mTexCoord.x = fmin(vv_mag*3, 1.0f);
-        v.mTexCoord.y = (1.0f - fmin(vv_mag*3, 1.0f));
+        double noise = pnoise.NoiseSample(v.mPos.x, v.mPos.y, v.mPos.z, 8, false) - 0.01;
+
+		// Vertex position deformation
+		auto vv = noise * v.mNormal * MaxDeformation;
+		v.mPos += vv;
+
+		// Store altitude in U of UV coordinate
+		v.mTexCoord.x = vv.Length();
+
+		// Get color interp fraction and set vertex color
+		double colorFrac = noise * (gColor.size() - 1);
+		int lowerIndex = static_cast<int>(colorFrac);
+		colorFrac -= lowerIndex;
+		Vector3 finalColor = (1.0 - colorFrac) * gColor[lowerIndex] + colorFrac * gColor[lowerIndex + 1];
+		v.mColor = finalColor;
     }
 }
 
-void Planet::SetIcoIterations(size_t iterations)
+void Planet::SetIcoIterations(size_t iterations, int perlinSeed)
 {
 	if (iterations == mCurrentIterations) return;
 
 	mCurrentIterations = iterations;
+	mPerlinSeed = perlinSeed;
 
-	// Create a new mesh with the new iteration count
-    auto meshPtr = ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(iterations, Deform, "Textures/EarthGradient.png"));
-	mMesh->SetMesh(meshPtr);
+	// Create the ocean / water level mesh
+	auto meshPtr = ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(iterations));
+	mWaterMesh->SetMesh(meshPtr);
 
-	// Get the shader we want for planets
+	// Get the shader we want for water on planets
 	auto shader = Game::Get().GetAssetCache().Load<Shader>("Shaders/BasicMesh");
 	if (shader)
 	{
@@ -63,7 +90,28 @@ void Planet::SetIcoIterations(size_t iterations)
 		auto shaderInstance = shader->CreateShaderInstance();
 
 		// Set up material defaults for planets
-		shaderInstance->BindEmissiveColor(Vector3(0.1f, 0.1f, 0.5f));
+		shaderInstance->BindDiffuseColor(Vector3(0.27f, 0.6f, 0.94f));
+		shaderInstance->BindSpecPower(8.0f);
+		// etc...
+
+		// Set new shader instance
+		meshPtr->SetShader(shaderInstance);
+	}
+
+	// Create the planet geometry mesh
+	DeformationFunction func = std::bind(&Planet::Deform, this, std::placeholders::_1);
+	meshPtr = ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(iterations, func));
+	mMesh->SetMesh(meshPtr);
+
+	// Get the shader we want for planets
+	if (shader)
+	{
+		// Create an instance of the shader for this planet so changes to planets don't affect other
+		// actors using this shader.
+		auto shaderInstance = shader->CreateShaderInstance();
+
+		// Set up material defaults for planets
+		shaderInstance->BindSpecPower(4.0f);
 		// etc...
 
 		// Set new shader instance
