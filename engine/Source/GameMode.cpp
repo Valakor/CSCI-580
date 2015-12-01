@@ -15,6 +15,8 @@
 #include "ProceduralMesh.h"
 #include "IcoGenerator.h"
 #include "Foliage.h"
+#include "Rock.h"
+#include "Sky.h"
 #include <cfloat>
 
 IMPL_ACTOR(GameMode, Actor);
@@ -35,23 +37,43 @@ void GameMode::BeginPlay()
     mHud = HUD::Spawn( mGame );
 
 	// Spawn Asteroids
-	const int NUM_ASTEROIDS = 500;
-	const Vector3 minVec( -5000.f, -5000.f, -5000.f );
-	const Vector3 maxVec( 5000.f, 5000.f, 5000.f );
+	const int NUM_ROCKS = 200;
 
-	for ( int i = 0; i < NUM_ASTEROIDS; ++i )
+	for ( int i = 0; i < NUM_ROCKS; ++i )
 	{
-	//	auto asteroid = Asteroid::Spawn( mGame );
-//		asteroid->SetPosition( Random::GetVector( minVec, maxVec ) );
+		auto Rock = Rock::Spawn( mGame );
+        float s = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+        Rock->SetScale(s * 10.0f);
+        Rock->SetRotation(Random::GetRotation() );
+    
+        int a, b, c;
+        float z;
+        float LO = -10.0f;
+        float HI =  10.0f;
+        while( true )
+        {
+            a = rand() % 31 - 15;
+            b = rand() % 31 - 15;
+            c = a * a + b * b;
+            //z = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+            z = LO + static_cast <float> (rand()) /( static_cast <float> (RAND_MAX/(HI-LO)));
+            
+            if( c >= 144 && c <= 225 ) break;
+        }
+        Rock->SetPosition(Vector3(a * 10.0f, b * 10.0f, z));
 	}
-
-	// Spawn ship
+    
+  	// Spawn ship
 	mShip = Ship::Spawn( mGame );
     
-    mTree = Tree::Spawn( mGame );
-  //  mTree->buildEverGreen(2, Vector3(0.0f, -20.0f, 0.0f));
-  //  mTree->buildGrass(Vector3(0.0f, 0.0f, 0.0f));
-    mTree->buildTree(2, Vector3(110.0f, 0.0f, -50.0f));
+ //   auto Cloud = Sky::Spawn( mGame );
+    
+  //  mTree = Tree::Spawn( mGame );
+  //  mTree->buildEverGreen(2, Vector3(0.0f, 0.0f, 0.0f));
+   // mTree->buildGrass(Vector3(0.0f, 0.0f, 0.0f));
+  //  mTree->buildFluffyTree(2, Vector3(0.0f, 0.0f, 0.0f));
+    
+ 
 
 	// Spawn a couple procedural mesh actors
 //	RegenerateWorld();

@@ -41,7 +41,7 @@ void FontComponent::Draw(class Renderer& render)
 		default:
 			break;
 		}
-		render.DrawSprite(mTexture, worldTrans);
+	//	render.DrawSprite(mTexture, worldTrans);
 	}
 }
 
