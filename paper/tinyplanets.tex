@@ -30,27 +30,38 @@
 
 \keywords{Procedural Generation, Graphics, Perlin Noise}
 
-\abstract{ In this paper we present a method of procedurally generating planetary models with geography by combining multi-fractal Perlin noise and recursive icospheres. ... placement of  trees and ..., also procedurally modeled, ... A material system was added to visualize the results in the graphics engine... }
+\abstract{ In this paper we present a method of procedurally generating stylized planetary models with geography by combining multi-fractal Perlin noise and recursive icospheres. ... placement of  trees and ..., also procedurally modeled, ... A material system was added to visualize the results in the graphics engine... }
 
 \onecolumn \maketitle \normalsize \vfill
 
 \section{\uppercase{Introduction}}
 \label{sec:introduction}
-\noindent In this work we present the results of implementing a series of techniques in a bare bones graphics engine, extending its core by adding a materials system and creating an application that utilizes procedural modeling techniques to create planetoids with natural looking geographical features.
+\noindent In this work we present the results of implementing a series of techniques in a bare bones real-time graphics engine, extending its core by adding a materials system and creating an application that utilizes procedural modeling techniques to create planetoids with natural looking geographical features. The graphics engine is built using the Simple DirectMedia Layer (SDL), a cross-platform solution for access to low-level peripherals and graphics hardware, and the openGL Extension Wrangler library (GLEW).
 
 \section{\uppercase{Environment}}
 \label{sec:env}
 
 \subsection{Material System}
 \label{sec:mat_sys}
+\noindent A material system is a framework that builds on top of and abstracts the functionality and bindings of basic vertex and pixel/fragment shaders, and is commonly used in real-time graphics applications. Materials combine a vertex and fragment shader in order to re-use common shading functionality amongst multiple meshes, and provide access to shader parameters (like emissive and diffuse colors, specular power, textures, etc.) in order to customize the appearance of different surfaces; the result is that only these parameters need to be changed to represent a multitude of surfaces rather than writing and loading shader programs for each surface. An added benefit is that it becomes possible to render all meshes with common materials without changing the shader program on the GPU by simply modifying the current shader program's inputs, improving performance. Our material system implements basic Phong shading in a single vertex and fragment shader pair, and allows customization of ambient, emissive, diffuse, and specular colors, specular power, and a single texture. The system also adopts the concept of material instances in order to allow different meshes using the same material to modify parameters without affecting each other. Figure \ref{fig_ms} is a visual representation of the system we have designed and implemented for the project. The quicker iteration time provided by the material system in customizing the different meshes in the application allowed us to focus on achieving the stylized look of our original goal.
+
+\begin{figure}
+\caption{Technical diagram of our simple material system}
+\label{fig_ms}
+\end{figure}
 
 \section{\uppercase{IcoSpheres}}
 \label{sec:icosphere}
-\noindent An icosphere is one of two of the most common ways of rendering spheres in computer graphics applications, the other being the UV sphere. An icosphere starts by taking a 20 sided polyhedron (icosahedron)  and recursively subdividing the faces to add detail. This method of generation makes the sphere's vertexes to be evenly distributed along the surface, which is a desirable trait for our use case since it lends itself better for deformation than UV spheres [REF]. Figure \ref{fig_isa} illustrates the basic idea behind this algorithm.
+\noindent An icosphere is one of two of the most common ways of rendering spheres in computer graphics applications, the other being the UV sphere. An icosphere starts by taking a 20 sided polyhedron (icosahedron)  and recursively subdividing the faces to add detail. This method of generation makes the sphere's vertexes to be evenly distributed along the surface, which is a desirable trait for our use case since it lends itself better for deformation than UV spheres [REF]. Figure \ref{fig_isa} illustrates the basic idea behind this algorithm. The number of iterations can be changed to produce more or less detailed icospheres for planetary generation. In the general algorithm, generated vertices are cached in order to avoid duplicates, reduce generation time, and allow for vertex indexing on the GPU. Furthermore, normals are trivial to produce: because we generate a unit sphere, normals are vertices have the same x,y,z components of the vertices themselves. This method - when combined with Phong shading - produces incredibly smooth-shaded spheres after only a few iterations; however, our stylistic goal involves flat shading, so we modified the algorithm to duplicate vertices and calculate surface normals per-triangle. Figure \ref{fig_isn} shows the difference in the two techniques. Interestingly, the iterative nature of generating an icosphere lends itself well to Level of Detail (LOD) systems, where lower iteration counts can be used for distant icospheres, though this concept was not explored in our project.
 
 \begin{figure}
 \caption{Representation of the icosphere subdivision algorithm}
 \label{fig_isa}
+\end{figure}
+
+\begin{figure}
+\caption{Left, the unmodified algorithm that produces indexed meshes and interpolates vertex normals. Right, our modified algorithm that produces surface normals.}
+\label{fig_isn}
 \end{figure}
 
 \section{\uppercase{Perlin Noise}}
