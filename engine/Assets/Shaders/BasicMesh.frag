@@ -5,6 +5,7 @@
 
 in vec4 outWorldPos;
 in vec4 outNormal;
+in vec4 vertColor;
 in vec2 outTexCoord;
 
 uniform vec4 EyePosW;   // Eye position in world space.
@@ -40,5 +41,5 @@ void main()
     vec4 Specular = pow( RdotV, MaterialShininess ) * LightColor * MaterialSpecular;
 
 	// Accumulate terms
-    outColor = ( Emissive + Ambient + Diffuse + Specular ) * texture( uTexture, outTexCoord );
+	outColor = ( Emissive + Ambient + Diffuse + Specular ) * vertColor * texture( uTexture, outTexCoord );
 }

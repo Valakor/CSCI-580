@@ -115,7 +115,7 @@ void IcoGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>&
     newVerts.reserve(indices.size());
     newIndices.reserve(indices.size());
     
-    for (int i = 0; i < indices.size(); i += 3)
+    for (size_t i = 0; i < indices.size(); i += 3)
     {
         Vertex v1 = verts[indices[i]];
         Vertex v2 = verts[indices[i+1]];
@@ -155,12 +155,12 @@ GLuint IcoGenerator::AddVertex(Vertex &vertex)
 	// Use position (already normalized) as the normal as well
 	vertex.mNormal = vertex.mPos;
 
-    /*
+
 	// Spherical UV mapping
 	vertex.mTexCoord = Vector2(0.5f + atan2f(vertex.mNormal.y, vertex.mNormal.x) / Math::TwoPi, 0.5f - asinf(vertex.mNormal.z));
 	vertex.mTexCoord.x *= 2.0f;
 	vertex.mTexCoord.y *= 0.5f;
-    */
+
 	mVerts->push_back(vertex);
 
     return mCurrentIndex++;

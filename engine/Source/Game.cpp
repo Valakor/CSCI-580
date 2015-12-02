@@ -130,7 +130,17 @@ void Game::AddInputMappings()
 {
     mInput.AddActionMapping("Quit", SDLK_ESCAPE);
 	mInput.AddActionMapping("Recenter", 'r');
-	mInput.AddActionMapping("Regenerate", 'f');
+
+	mInput.AddActionMapping("Regenerate0", '0');
+	mInput.AddActionMapping("Regenerate1", '1');
+	mInput.AddActionMapping("Regenerate2", '2');
+	mInput.AddActionMapping("Regenerate3", '3');
+	mInput.AddActionMapping("Regenerate4", '4');
+	mInput.AddActionMapping("Regenerate5", '5');
+	mInput.AddActionMapping("Regenerate6", '6');
+	mInput.AddActionMapping("Regenerate7", '7');
+	mInput.AddActionMapping("Regenerate8", '8');
+	mInput.AddActionMapping("Regenerate9", '9');
     
     mInput.AddAxisMapping("Move", 'p', SDLK_SEMICOLON);
     mInput.AddAxisMapping("Yaw", 'd', 'a');

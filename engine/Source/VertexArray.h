@@ -17,24 +17,29 @@ struct Vertex
 	Vector3 mPos;
 	// Vertex normal
 	Vector3 mNormal;
+	// Vertex color
+	Vector3 mColor;
 	// Texture coordinate of vertex
 	Vector2 mTexCoord;
 
 	Vertex(float x, float y, float z, float u, float v)
 		:mPos(x, y, z)
 		,mNormal(0.f, 0.f, 0.f)
+		,mColor(Vector3(1.0f, 1.0f, 1.0f))
 		,mTexCoord(u,v)
 	{}
 
 	Vertex(const Vector3& pos, const Vector2& texcoord)
 		:mPos(pos)
 		,mNormal(0.f, 0.f, 0.f)
+		,mColor(Vector3(1.0f, 1.0f, 1.0f))
 		,mTexCoord(texcoord)
 	{}
 
 	Vertex(const Vector3& pos, const Vector3& normal, const Vector2& texcoord)
 		:mPos(pos)
 		,mNormal(normal)
+		,mColor(Vector3(1.0f, 1.0f, 1.0f))
 		,mTexCoord(texcoord)
 	{}
 };
