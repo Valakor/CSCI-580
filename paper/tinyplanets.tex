@@ -89,6 +89,8 @@ Classical Perlin noise is homogeneous and isotropic, this plays against the rati
 
 The deformation is the result of displacing the vertex by a value up to a maximum deformation in the direction of the vertex normal vector, which could be interpreted as 'up' in the terrains frame of reference, thus creating a relief.
 
+Planetary terrain is colored per-vertex using a weighted color look-up table where the index is calculated using the vertex's 'altitude' (simply the magnitude of the vertex's position). The vertex colors are interpolated by the GPU and then applied per-pixel rather than using a texture.
+
 \begin{figure}
 \caption{Terrain deformation algorithm illustrated}
 \label{fig_tda}
