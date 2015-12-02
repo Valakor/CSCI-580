@@ -52,7 +52,7 @@ void Planet::Deform(std::vector<Vertex>& verts)
     for (auto& v : verts)
     {
         // [0, 1]
-        double noise = pnoise.NoiseSample(v.mPos.x, v.mPos.y, v.mPos.z, 8, false) - 0.01;
+        float noise = static_cast<float>(pnoise.NoiseSample(v.mPos.x, v.mPos.y, v.mPos.z, 8, false) - 0.01);
 
 		// Vertex position deformation
 		auto vv = noise * v.mNormal * MaxDeformation;
@@ -62,10 +62,10 @@ void Planet::Deform(std::vector<Vertex>& verts)
 		v.mTexCoord.x = vv.Length();
 
 		// Get color interp fraction and set vertex color
-		double colorFrac = noise * (gColor.size() - 1);
+		float colorFrac = noise * (gColor.size() - 1);
 		int lowerIndex = static_cast<int>(colorFrac);
 		colorFrac -= lowerIndex;
-		Vector3 finalColor = (1.0 - colorFrac) * gColor[lowerIndex] + colorFrac * gColor[lowerIndex + 1];
+		Vector3 finalColor = (1.0f - colorFrac) * gColor[lowerIndex] + colorFrac * gColor[lowerIndex + 1];
 		v.mColor = finalColor;
     }
 }

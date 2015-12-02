@@ -115,7 +115,7 @@ void IcoGenerator::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>&
     newVerts.reserve(indices.size());
     newIndices.reserve(indices.size());
     
-    for (int i = 0; i < indices.size(); i += 3)
+    for (size_t i = 0; i < indices.size(); i += 3)
     {
         Vertex v1 = verts[indices[i]];
         Vertex v2 = verts[indices[i+1]];

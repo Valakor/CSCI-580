@@ -68,7 +68,7 @@ void GameMode::BeginPlay()
 
 void GameMode::RegenerateWorld(int icoIterations)
 {
-	for (int i = 0; i < mPlanets.size(); ++i)
+	for (size_t i = 0; i < mPlanets.size(); ++i)
 	{
 		mPlanets[i]->SetIcoIterations(icoIterations, i);
 	}
