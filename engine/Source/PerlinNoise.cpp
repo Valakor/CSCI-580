@@ -8,10 +8,26 @@
 
 #include "PerlinNoise.h"
 #include "Math.h"
+#include <random>
+#include <numeric>
+#include <algorithm>
+#include "Random.h"
 
+#define FADE(t) ((t) * (t) * (t) * ((t) * ((t) * 6 - 15) + 10))
+#define GET_P(i) (mGradients[((i)%256)])
+#define MLERP(f, a, b)   Math::Lerp((a), (b), (f))
 
-int p[] =
-    {   151,160,137,91,90,15,
+static double grad(int hash, double x, double y, double z)
+{
+    int h = hash & 15;
+    double u = h<8 ? x : y,
+           v = h<4 ? y : h==12||h==14 ? x : z;
+    return ((h&1) == 0 ? u : -1*u) + ((h&2) == 0 ? v : -1*v);
+}
+
+PerlinNoise::PerlinNoise()
+{
+    mGradients =  {   151,160,137,91,90,15,
         131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
         190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
         88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,
@@ -25,17 +41,20 @@ int p[] =
         49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
         138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
     };
+}
 
-#define FADE(t) ((t) * (t) * (t) * ((t) * ((t) * 6 - 15) + 10))
-#define GET_P(i) (p[((i)%256)])
-#define MLERP(f, a, b)   Math::Lerp((a), (b), (f))
-
-static double grad(int hash, double x, double y, double z)
+PerlinNoise::PerlinNoise(unsigned int seed)
 {
-    int h = hash & 15;
-    double u = h<8 ? x : y,
-           v = h<4 ? y : h==12||h==14 ? x : z;
-    return ((h&1) == 0 ? u : -1*u) + ((h&2) == 0 ? v : -1*v);
+    mGradients.resize(256);
+    
+    // Fill with values from 0 to 255
+    std::iota(mGradients.begin(), mGradients.end(), 0);
+    
+    // Initialize a random engine with seed
+    std::default_random_engine engine(seed);
+    
+    // Suffle  using the above random engine
+    std::shuffle(mGradients.begin(), mGradients.end(), engine);
 }
 
 double PerlinNoise::Noise(double x, double y, double z)
@@ -77,7 +96,7 @@ double PerlinNoise::NoiseSample(double x, double y, double z, int octaves, bool 
             
     for (int o=0; o < octaves; ++o)
     {
-        float add = (0.5 / (1 << o))*PerlinNoise::Noise(x * (2 << o), y * (2 << o), z * (2 << o));
+        float add = (0.5 / (1 << o))*Noise(x * (2 << o), y * (2 << o), z * (2 << o));
         pn += ( add );
     }
     

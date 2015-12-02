@@ -14,9 +14,14 @@ class Shader : public Asset
 	DECL_ASSET( Shader, Asset );
 public:
 	Shader();
+	Shader(const Shader&) = default;
 	virtual ~Shader();
 
 	void SetActive();
+
+	void SetDefaultAttributes();
+
+	std::shared_ptr<Shader> CreateShaderInstance();
 
 	// NOTE: Bind functions assume that this shader is active
 	void BindViewProjection( const Matrix4& viewProj );
@@ -26,13 +31,11 @@ public:
 	void BindLightColor(const Vector3& color) { lightColor = color; }
 	void BindLightPosition(const Vector3& pos) { lightPos = pos; }
 
-	bool BindUniformVector3(const std::string& name, const Vector3& input, float w);
-	bool BindUniformFloat(const std::string& name, float input);
-	bool BindAmbientColor(const Vector3& ambient);
-	bool BindEmissiveColor(const Vector3& emissive);
-	bool BindDiffuseColor(const Vector3& diffuse);
-	bool BindSpecularColor(const Vector3& specular);
-	bool BindSpecPower(float power);
+	void BindAmbientColor(const Vector3& ambient) { mAmbientColor = ambient; }
+	void BindEmissiveColor(const Vector3& emissive) { mEmissiveColor = emissive; }
+	void BindDiffuseColor(const Vector3& diffuse) { mDiffuseColor = diffuse; }
+	void BindSpecularColor(const Vector3& specular) { mSpecularColor = specular; }
+	void BindSpecPower(float power) { mSpecularPower = power; }
 
 	void UploadUniformsToGPU();
 
@@ -41,6 +44,10 @@ public:
 
 	GLuint GetShaderProgram() const { return mShaderProgram; }
 protected:
+
+	bool BindUniformVector3(const std::string& name, const Vector3& input, float w = 1.0f);
+	bool BindUniformFloat(const std::string& name, float input);
+
 	bool Load( const char* fileName, class AssetCache* cache ) override;
 	bool IsCompiled( GLuint shader );
 	bool IsValidProgram();
@@ -57,10 +64,17 @@ private:
 	Vector3 lightColor;
 	Vector3 lightPos;
 
+	Vector3 mAmbientColor;
+	Vector3 mEmissiveColor;
+	Vector3 mDiffuseColor;
+	Vector3 mSpecularColor;
+	float mSpecularPower;
+
 	GLuint mVertexShader;
 	GLuint mFragmentShader;
 	GLuint mShaderProgram;
-	GLuint mUniformBuffer;
+
+	bool bIsInstance;
 };
 
 DECL_PTR( Shader );

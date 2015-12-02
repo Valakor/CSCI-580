@@ -11,10 +11,15 @@
 
 #include "ProceduralMesh.h"
 #include <map>
+#include <functional>
+
+typedef std::function<void(std::vector<Vertex>&)> DeformationFunction;
 
 struct IcoGenerator : public MeshGenerator
 {
-	IcoGenerator(size_t recursions) : mNumRecursions(recursions) { }
+	IcoGenerator(size_t recursions) : mNumRecursions(recursions), mTexturePath("Textures/Default.png") { }
+    IcoGenerator(size_t recursions, DeformationFunction defFunc) : mNumRecursions(recursions), mDeformationFunction(defFunc), mTexturePath("Textures/Default.png") { }
+    IcoGenerator(size_t recursions, DeformationFunction defFunc, std::string texturePath) : mNumRecursions(recursions), mDeformationFunction(defFunc), mTexturePath(texturePath) { }
 	virtual ~IcoGenerator() { }
 
 	virtual void GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>& indices, std::vector<TexturePtr>& textures, float& radius) override;
@@ -33,5 +38,9 @@ private:
 
 	std::vector<Vertex>* mVerts;
 	std::vector<GLuint>* mIndices;
+
+    DeformationFunction mDeformationFunction = nullptr;
+
+    std::string mTexturePath;
 };
 

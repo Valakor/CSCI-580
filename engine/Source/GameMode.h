@@ -11,6 +11,7 @@
 #include "AudioComponent.h"
 #include "HUD.h"
 #include "Ship.h"
+#include "Planet.h"
 #include "GameTimers.h"
 #include "Tree.h"
 
@@ -24,8 +25,9 @@ public:
 
 private:
 
-	std::vector<ActorPtr> mProceduralActors;
+	std::vector<PlanetPtr> mPlanets;
 	void RegenerateWorld();
+    void addPlanetRing();
     
     AudioComponentPtr mAudio;
 

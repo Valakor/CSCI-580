@@ -2,26 +2,45 @@
 #include <fstream>
 #include <sstream>
 #include <SDL/SDL.h>
-#include "ShaderCache.h"
 
 Shader::Shader()
 	:mVertexShader( 0 )
 	, mFragmentShader( 0 )
 	, mShaderProgram( 0 )
+	, bIsInstance(false)
 {
 
 }
 
 Shader::~Shader()
 {
-	glDeleteProgram( mShaderProgram );
-	glDeleteShader( mVertexShader );
-	glDeleteShader( mFragmentShader );
+	if (!bIsInstance)
+	{
+		glDeleteProgram(mShaderProgram);
+		glDeleteShader(mVertexShader);
+		glDeleteShader(mFragmentShader);
+	}
 }
 
 void Shader::SetActive()
 {
 	glUseProgram( mShaderProgram );
+}
+
+void Shader::SetDefaultAttributes()
+{
+	mAmbientColor = Vector3(0.1f, 0.1f, 0.1f);
+	mEmissiveColor = Vector3(0, 0, 0);
+	mDiffuseColor = Vector3(1, 1, 1);
+	mSpecularColor = Vector3(1, 1, 1);
+	mSpecularPower = 16.0f;
+}
+
+ShaderPtr Shader::CreateShaderInstance()
+{
+	auto instance = std::make_shared<Shader>(*this);
+	instance->bIsInstance = true;
+	return instance;
 }
 
 void Shader::BindViewProjection( const Matrix4& viewProj )
@@ -32,6 +51,40 @@ void Shader::BindViewProjection( const Matrix4& viewProj )
 void Shader::BindWorldTransform( const Matrix4& worldTransform )
 {
 	mMatrixBlock.mWorldTransform = worldTransform;
+}
+
+void Shader::UploadUniformsToGPU()
+{
+	GLuint view = glGetUniformLocation( mShaderProgram, "uViewProj" );
+	glUniformMatrix4fv( view, 1, GL_FALSE, mMatrixBlock.mViewProj.GetAsFloatPtr() );
+	GLuint world = glGetUniformLocation( mShaderProgram, "uWorldTransform" );
+	glUniformMatrix4fv( world, 1, GL_FALSE, mMatrixBlock.mWorldTransform.GetAsFloatPtr() );
+	
+	BindUniformVector3("EyePosW", cameraPos, 1.0f);
+	BindUniformVector3("LightPosW", lightPos, 1.0f);
+	BindUniformVector3("LightColor", lightColor, 1.0f);
+
+	BindUniformVector3("Ambient", mAmbientColor, 1.0f);
+	BindUniformVector3("MaterialEmissive", mEmissiveColor, 1.0f);
+	BindUniformVector3("MaterialDiffuse", mDiffuseColor, 1.0f);
+	BindUniformVector3("MaterialSpecular", mSpecularColor, 1.0f);
+	BindUniformFloat("MaterialShininess", mSpecularPower);
+}
+
+void Shader::BindTexture( const char* param, TexturePtr texture, int unit )
+{
+	glActiveTexture( GL_TEXTURE0 );
+	texture->SetActive();
+
+	// We want to wrap textures
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	GLuint uniform = glGetUniformLocation( mShaderProgram, param );
+	glUniform1i( uniform, unit );
 }
 
 bool Shader::BindUniformVector3(const std::string& name, const Vector3& input, float w)
@@ -56,62 +109,6 @@ bool Shader::BindUniformFloat(const std::string& name, float input)
 	}
 
 	return false;
-}
-
-bool Shader::BindAmbientColor(const Vector3& ambient)
-{
-	return BindUniformVector3("Ambient", ambient, 1.0f);
-}
-
-bool Shader::BindEmissiveColor(const Vector3& emissive)
-{
-	return BindUniformVector3("MaterialEmissive", emissive, 1.0f);
-}
-
-bool Shader::BindDiffuseColor(const Vector3& diffuse)
-{
-	return BindUniformVector3("MaterialDiffuse", diffuse, 1.0f);
-}
-
-bool Shader::BindSpecularColor(const Vector3& specular)
-{
-	return BindUniformVector3("MaterialSpecular", specular, 1.0f);
-}
-
-bool Shader::BindSpecPower(float power)
-{
-	return BindUniformFloat("MaterialShininess", power);
-}
-
-void Shader::UploadUniformsToGPU()
-{
-	GLuint view = glGetUniformLocation( mShaderProgram, "uViewProj" );
-	glUniformMatrix4fv( view, 1, GL_FALSE, mMatrixBlock.mViewProj.GetAsFloatPtr() );
-	GLuint world = glGetUniformLocation( mShaderProgram, "uWorldTransform" );
-	glUniformMatrix4fv( world, 1, GL_FALSE, mMatrixBlock.mWorldTransform.GetAsFloatPtr() );
-	
-	GLuint camera = glGetUniformLocation(mShaderProgram, "EyePosW");
-	glUniform4f(camera, cameraPos.x, cameraPos.y, cameraPos.z, 1.0f);
-	GLuint light = glGetUniformLocation(mShaderProgram, "LightPosW");
-	glUniform4f(light, lightPos.x, lightPos.y, lightPos.z, 1.0f);
-	GLuint lightC = glGetUniformLocation(mShaderProgram, "LightColor");
-	glUniform4f(lightC, lightColor.x, lightColor.y, lightColor.z, 1.0f);
-}
-
-void Shader::BindTexture( const char* param, TexturePtr texture, int unit )
-{
-	glActiveTexture( GL_TEXTURE0 );
-	texture->SetActive();
-
-	// We want to wrap textures
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-	GLuint uniform = glGetUniformLocation( mShaderProgram, param );
-	glUniform1i( uniform, unit );
 }
 
 bool Shader::Load( const char* fileName, class AssetCache* cache )
@@ -181,12 +178,7 @@ bool Shader::Load( const char* fileName, class AssetCache* cache )
 		return false;
 	}
 
-	// add to the game shader cache
-	if (!ShaderCache::Get().RegisterShader(fileName, ThisPtr()))
-	{
-		SDL_Log("Shader program %s already registered in shader cache.", fileName);
-		return false;
-	}
+	SetDefaultAttributes();
 
 	return true;
 }
@@ -222,17 +214,5 @@ bool Shader::IsValidProgram()
 		return false;
 	}
 
-	//	glValidateProgram(mShaderProgram);
-	//	glGetProgramiv(mShaderProgram, GL_VALIDATE_STATUS, &status);
-	//	if (status != GL_TRUE)
-	//	{
-	//		glGetProgramInfoLog(mShaderProgram, 512, nullptr, buffer);
-	//		SDL_Log("GLSL Validate Status:\n%s", buffer);
-	//		// If this is just a warning, don't die
-	//		if (buffer[0] != 'W')
-	//		{
-	//			return false;
-	//		}
-	//	}
 	return true;
 }

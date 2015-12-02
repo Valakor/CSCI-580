@@ -69,9 +69,30 @@ bool ProceduralMesh::Generate()
 
 	mGenerator->GenerateMesh(verts, indices, mTextures, mRadius);
 
+	// Load default texture if none given by generator
 	if (mTextures.size() == 0)
 	{
-		mTextures.push_back(Game::Get().GetAssetCache().Load<Texture>("Textures/EarthGradient.png"));
+		auto mTexture = Game::Get().GetAssetCache().Load<Texture>("Textures/Default.png");
+		if (!mTexture)
+		{
+			SDL_Log("Failed to load default texture");
+			return false;
+		}
+		else
+		{
+			mTextures.push_back(mTexture);
+		}
+	}
+
+	// Load default shader if none given by generator
+	if (!mShader)
+	{
+		mShader = Game::Get().GetAssetCache().Load<Shader>("Shaders/BasicMesh");
+		if (!mShader)
+		{
+			SDL_Log("Failed to load default basic mesh shader");
+			return false;
+		}
 	}
 
 	mVertexArray = VertexArray::Create(verts.data(), verts.size(), indices.data(), indices.size());

@@ -142,20 +142,16 @@ void Renderer::DrawSprite(TexturePtr texture, const Matrix4& worldTransform)
 	DrawVertexArray(mSpriteVerts);
 }
 
-void Renderer::DrawBasicMesh(VertexArrayPtr vertArray, TexturePtr texture, const Matrix4& worldTransform)
+void Renderer::DrawBasicMesh(ShaderPtr shader, VertexArrayPtr vertArray, TexturePtr texture, const Matrix4& worldTransform)
 {
-    mBasicMeshShader->SetActive();
-    mBasicMeshShader->BindWorldTransform(worldTransform);
-	mBasicMeshShader->BindLightPosition(Vector3());
-	mBasicMeshShader->BindLightColor(Vector3(1.0f, 1.0f, 1.0f));
-    mBasicMeshShader->UploadUniformsToGPU();
-    
-	mBasicMeshShader->BindAmbientColor(Vector3(0.1f, 0.1f, 0.1f));
-	mBasicMeshShader->BindEmissiveColor(Vector3(0, 0, 0));
-	mBasicMeshShader->BindDiffuseColor(Vector3(1, 1, 1));
-	mBasicMeshShader->BindSpecularColor(Vector3(1, 1, 1));
-	mBasicMeshShader->BindSpecPower(16.0f);
-    mBasicMeshShader->BindTexture("uTexture", texture, 0);
+	shader->SetActive();
+	shader->BindViewProjection(mView * mProj);
+	shader->BindCameraPosition(mCameraPos);
+	shader->BindWorldTransform(worldTransform);
+    shader->BindLightPosition(Vector3(500.0f, 0.0f, 0.0f));
+	shader->BindLightColor(Vector3(1.0f, 1.0f, 1.0f));
+	shader->UploadUniformsToGPU();
+	shader->BindTexture("uTexture", texture, 0);
     
     DrawVertexArray(vertArray);
 }
@@ -169,12 +165,11 @@ void Renderer::DrawVertexArray(VertexArrayPtr vertArray)
 void Renderer::UpdateViewMatrix( const Matrix4& newMatrix )
 {
 	mView = newMatrix;
-	mBasicMeshShader->BindViewProjection( mView * mProj );
 }
 
 void Renderer::UpdateViewPos(const Vector3& newPos)
 {
-	mBasicMeshShader->BindCameraPosition(newPos);
+	mCameraPos = newPos;
 }
 
 Vector3 Renderer::Unproject( const Vector3& screenPoint ) const
@@ -198,6 +193,7 @@ Vector3 Renderer::Unproject( const Vector3& screenPoint ) const
 void Renderer::Clear()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClearColor(88.0f/255.0f, 204.0f/255.05, 1.0f, 1.0f);
 }
 
 void Renderer::DrawComponents()
@@ -261,16 +257,7 @@ bool Renderer::InitShaders()
 		static_cast<float>(mHeight), 1000.0f, -1000.0f);
 	mSpriteShader->BindViewProjection(mSpriteViewProj);
     
-    mBasicMeshShader = mGame.GetAssetCache().Load<Shader>("Shaders/BasicMesh");
-    if (!mBasicMeshShader)
-    {
-        SDL_Log("Failed to load basic mesh shader");
-        return false;
-    }
-    
-    mBasicMeshShader->SetActive();
 	mProj = Matrix4::CreatePerspectiveFOV( 1.22f, static_cast<float>(mWidth), static_cast<float>(mHeight), 25.0f, 10000.0f );
-	mBasicMeshShader->BindViewProjection( mProj );
 
 	return true;
 }

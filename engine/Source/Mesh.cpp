@@ -126,6 +126,14 @@ bool Mesh::Load(const char* fileName, AssetCache* cache)
 	// Now create a vertex array
 	mVertexArray = VertexArray::Create(vertices.data(), vertices.size(), 
 		indices.data(), indices.size());
+
+	// Load a default shader
+	mShader = cache->Load<Shader>("Shaders/BasicMesh");
+	if (!mShader)
+	{
+		SDL_Log("Failed to load default basic mesh shader");
+		return false;
+	}
 	return true;
 }
 

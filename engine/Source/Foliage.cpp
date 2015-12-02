@@ -37,7 +37,7 @@ void Foliage::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>& indi
 
     else if(mFoliageType == 2) {
        createEverGreen(indices);
-        textures.push_back(Game::Get().GetAssetCache().Load<Texture>("Textures/EverGreen.png"));
+       textures.push_back(Game::Get().GetAssetCache().Load<Texture>("Textures/EverGreen.png"));
 
     }
 
@@ -70,7 +70,7 @@ void Foliage::createBranch(std::vector<GLuint>& indices)
     
     float tx = .2f;
     float ty = .2f;
-    float tz = 3.0f;
+    float tz = 2.0f;
     //Top
     AddVertex(Vertex(Vector3(tx * cos(0.0f), ty * sin(0.0f), tz), Vector2()));
     AddVertex(Vertex(Vector3(tx * cos(1.25664f), ty * sin(1.25664f),tz), Vector2()));
@@ -91,20 +91,20 @@ void Foliage::createBranch(std::vector<GLuint>& indices)
     //Trunk
     
     
-    faces.push_back(std::make_shared<TriIndices>(0, 5, 6));
-    faces.push_back(std::make_shared<TriIndices>(0, 6, 1));
+    faces.push_back(std::make_shared<TriIndices>(0, 6, 5));
+    faces.push_back(std::make_shared<TriIndices>(0, 1, 6));
     
-    faces.push_back(std::make_shared<TriIndices>(1, 6, 7));
-    faces.push_back(std::make_shared<TriIndices>(1, 7, 2));
+    faces.push_back(std::make_shared<TriIndices>(1, 7, 6));
+    faces.push_back(std::make_shared<TriIndices>(1, 2, 7));
     
-    faces.push_back(std::make_shared<TriIndices>(2, 7, 8));
-    faces.push_back(std::make_shared<TriIndices>(2, 8, 3));
+    faces.push_back(std::make_shared<TriIndices>(2, 8, 7));
+    faces.push_back(std::make_shared<TriIndices>(2, 3, 8));
     
-    faces.push_back(std::make_shared<TriIndices>(3, 8, 9));
-    faces.push_back(std::make_shared<TriIndices>(3, 9, 4));
+    faces.push_back(std::make_shared<TriIndices>(3, 9, 8));
+    faces.push_back(std::make_shared<TriIndices>(3, 4, 9));
     
-    faces.push_back(std::make_shared<TriIndices>(4, 9, 5));
-    faces.push_back(std::make_shared<TriIndices>(4, 5, 0));
+    faces.push_back(std::make_shared<TriIndices>(4, 5, 9));
+    faces.push_back(std::make_shared<TriIndices>(4, 0, 5));
 
     
     // finalize index buffer
@@ -119,9 +119,16 @@ void Foliage::createBranch(std::vector<GLuint>& indices)
 
 void Foliage::createEverGreen(std::vector<GLuint>& indices) {
     
-    int lvl = 4;
-    for(int i  = 0; i < lvl; i++) {
-        createPyramid(indices,  (1.7 + (i/10.0f)),  Vector3(0.0f, 0.0f, float(lvl - i)), 2.0f, (i * 5));
+    int lvl = 1;
+    
+    if(lvl == 1) {
+        createPyramid(indices,  (1.7),  Vector3(0.0f, 0.0f, 1.0f), 7.0f,  0);
+    }
+    
+    else {
+        for(int i  = 0; i < lvl; i++) {
+            createPyramid(indices,  (1.7 + (i/10.0f)),  Vector3(0.0f, 0.0f, float(lvl - i - 1.0)), 2.0f, (i * 5));
+        }
     }
 }
 
@@ -161,6 +168,7 @@ void Foliage::createPyramid(std::vector<GLuint>& indices, float scale, Vector3 p
 
 void Foliage::createGrassCluster(std::vector<GLuint>& indices) {
     //random generator for number in cluster
+    
     int num = rand() % 10 + 1;
     
     for(int i = 0; i < num; i++) {

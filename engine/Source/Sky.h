@@ -17,6 +17,7 @@ class Sky : public Actor
 public:
     
     Sky(class Game& game);
+    void addClouds(Vector3 pos);
     
 };
 
