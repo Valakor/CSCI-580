@@ -37,7 +37,7 @@ void Foliage::GenerateMesh(std::vector<Vertex>& verts, std::vector<GLuint>& indi
 
     else if(mFoliageType == 2) {
        createEverGreen(indices);
-       textures.push_back(Game::Get().GetAssetCache().Load<Texture>("Textures/EverGreen.png"));
+       textures.push_back(Game::Get().GetAssetCache().Load<Texture>("Textures/Default.png"));
 
     }
 
@@ -119,7 +119,7 @@ void Foliage::createBranch(std::vector<GLuint>& indices)
 
 void Foliage::createEverGreen(std::vector<GLuint>& indices) {
     
-    int lvl = 1;
+    int lvl = rand() % 4 + 1;
     
     if(lvl == 1) {
         createPyramid(indices,  (1.7),  Vector3(0.0f, 0.0f, 1.0f), 7.0f,  0);
@@ -153,8 +153,8 @@ void Foliage::createPyramid(std::vector<GLuint>& indices, float scale, Vector3 p
     //TreeTop
     faces.push_back(std::make_shared<TriIndices>(0 + offset, 1 + offset, 4 + offset));
     faces.push_back(std::make_shared<TriIndices>(1 + offset, 2 + offset, 4 + offset));
-    faces.push_back(std::make_shared<TriIndices>(2 + offset, 3 + offset, 4 + offset));
-    faces.push_back(std::make_shared<TriIndices>(3 + offset, 0 + offset, 4 + offset));
+    faces.push_back(std::make_shared<TriIndices>(2 + offset, 4 + offset, 3 + offset));
+    faces.push_back(std::make_shared<TriIndices>(3 + offset, 4 + offset, 0 + offset));
     
     for (auto tri : faces)
     {

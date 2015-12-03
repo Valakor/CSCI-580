@@ -167,7 +167,26 @@ void Planet::addFoliage(const std::vector<Vertex>& verts) {
 		float altitude = verts[i].mTexCoord.x;
 		if (altitude > 0.0f)
 		{
-			mTrees.push_back(Tree::buildEverGreen(2,pos, deltaRotation));
+            if(altitude > 0.3f) {
+                int add = rand() % 10;
+                if( add == 0) {
+                    mTrees.push_back(Tree::buildEverGreen(2,pos, deltaRotation));
+                }
+            }
+            
+            else if(altitude < 0.2f) {
+                int lvl = rand() % 3 + 1;
+                int add = rand() % 30;
+                if( add == 0) {
+                    mTrees.push_back(Tree::buildTree(lvl ,pos, deltaRotation));
+                }
+                
+                else if (add == 2) {
+                     mTrees.push_back(Tree::buildGrass(pos, deltaRotation));
+                    
+                }
+                
+            }
 		}
 
     }

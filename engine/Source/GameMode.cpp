@@ -41,7 +41,7 @@ void GameMode::BeginPlay()
 	mShip = Ship::Spawn( mGame );
 
     
-   // addPlanetRing();
+    addPlanetRing();
     
     
  //   mTree = Tree::Spawn( mGame );
