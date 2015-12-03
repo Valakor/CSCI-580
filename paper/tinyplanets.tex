@@ -40,7 +40,7 @@
 
 \section{\uppercase{Material System}}
 \label{sec:mat_sys}
-\noindent A material system is a framework that builds on top of and abstracts the functionality and bindings of basic vertex and pixel/fragment shaders, and is commonly used in real-time graphics applications. Materials combine a vertex and fragment shader in order to re-use common shading functionality amongst multiple meshes, and provide access to shader parameters (like emissive and diffuse colors, specular power, textures, etc.) in order to customize the appearance of different surfaces; the result is that only these parameters need to be changed to represent a multitude of surfaces rather than writing and loading shader programs for each surface. An added benefit is that it becomes possible to render all meshes with common materials without changing the shader program on the GPU by simply modifying the current shader program's inputs, thereby improving performance.
+\noindent A material system is a framework that builds on top of and abstracts the functionality and bindings of basic vertex and pixel/fragment shaders, and is commonly used in real-time graphics applications \cite{gengines}. Materials combine a vertex and fragment shader in order to re-use common shading functionality amongst multiple meshes, provide access to shader parameters (like emissive and diffuse colors, specular power, textures, etc.), and allow for custom math expressions in order to customize the appearance of different surfaces; the result is that only these parameters and expressions need to be changed to represent a multitude of surfaces rather than writing and loading shader programs for each surface. An added benefit is that it becomes possible to render all meshes with common materials without changing the shader program on the GPU by simply modifying the current shader program's inputs, thereby improving performance.
 Our material system implements basic Phong shading in a single vertex and fragment shader pair, and allows customization of ambient, emissive, diffuse, and specular colors, specular power, and a single texture. The system also adopts the concept of material instances in order to allow different meshes using the same material to modify parameters without affecting each other. Figure \ref{fig_ms} is a visual representation of the system we have designed and implemented for the project. The quicker iteration time provided by the material system in customizing the different meshes in the application allowed us to focus on achieving the stylized look of our original goal.
 
 \begin{figure}
@@ -61,6 +61,7 @@ In the general algorithm, generated vertices are cached in order to avoid duplic
 \end{figure}
 
 \begin{figure}
+\includegraphics[scale=0.24]{./images/icospheres/icospheresnormals.png}
 \caption{Left, the unmodified algorithm after 2 iterations that produces indexed meshes and interpolates vertex normals. Right, our modified algorithm that produces surface normals.}
 \label{fig_isn}
 \end{figure}
