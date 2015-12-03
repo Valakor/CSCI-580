@@ -64,7 +64,7 @@ void Planet::Deform(std::vector<Vertex>& verts)
 		v.mPos += vv;
 
 		// Store altitude in U of UV coordinate
-		v.mTexCoord.x = vv.Length();
+		v.mTexCoord.x = noise + 0.01f;
 
 		// Get color interp fraction and set vertex color
 		float colorFrac = noise * (gColor.size() - 1);
@@ -164,10 +164,11 @@ void Planet::addFoliage(const std::vector<Vertex>& verts) {
 			deltaRotation = Quaternion( axis,  deltaAngle );
 		}
 
-        float len = pos.Length();
-       // if(len > 800.0f) {
-		mTrees.push_back(Tree::buildEverGreen(2,pos, deltaRotation));
-       // }
+		float altitude = verts[i].mTexCoord.x;
+		if (altitude > 0.0f)
+		{
+			mTrees.push_back(Tree::buildEverGreen(2,pos, deltaRotation));
+		}
 
     }
     
