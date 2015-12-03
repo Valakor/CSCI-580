@@ -148,7 +148,7 @@ void Renderer::DrawBasicMesh(ShaderPtr shader, VertexArrayPtr vertArray, Texture
 	shader->BindViewProjection(mView * mProj);
 	shader->BindCameraPosition(mCameraPos);
 	shader->BindWorldTransform(worldTransform);
-    shader->BindLightPosition(Vector3(500.0f, 0.0f, 0.0f));
+    shader->BindLightPosition(Vector3(0.0f, 0.0f, 0.0f));
 	shader->BindLightColor(Vector3(1.0f, 1.0f, 1.0f));
 	shader->UploadUniformsToGPU();
 	shader->BindTexture("uTexture", texture, 0);
@@ -193,7 +193,7 @@ Vector3 Renderer::Unproject( const Vector3& screenPoint ) const
 void Renderer::Clear()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glClearColor(88.0f/255.0f, 204.0f/255.05, 1.0f, 1.0f);
+	glClearColor(88.0f/255.0f, 204.0f/255.05, 1.0f, 1.0f);
 }
 
 void Renderer::DrawComponents()

@@ -56,7 +56,7 @@ void GameMode::BeginPlay()
 	// Create a couple planets
 	static const size_t NUM_PLANETS = 1;
 	static const float RADIUS = 700.0f;
-	float angle = 90.0f;
+	float angle = 0.0f;
 	for (int i = 0; i < NUM_PLANETS; ++i)
 	{
 		auto planet = Planet::Spawn(mGame);
@@ -87,11 +87,7 @@ void GameMode::RegenerateWorld(int icoIterations)
 	for (size_t i = 0; i < mPlanets.size(); ++i)
 	{
 		mPlanets[i]->SetIcoIterations(icoIterations, i);
-        
-        mPlanets[i]->addFoliage();
     }
-    
-
 }
 
 

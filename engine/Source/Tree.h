@@ -27,7 +27,7 @@ public:
     
     Tree(class Game& game);
     void buildTree(int lvl, Vector3 pos);
-    void buildEverGreen(int lvl, Vector3 pos, Quaternion rot);
+    ActorPtr buildEverGreen(int lvl, Vector3 pos, Quaternion rot);
     void buildFluffyTree(int lvl, Vector3 pos);
     void buildGrass(Vector3 pos);
     

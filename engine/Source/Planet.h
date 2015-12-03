@@ -25,13 +25,18 @@ class Planet : public Actor
 	int mPerlinSeed;
 
 	void Deform(std::vector<Vertex>& verts);
-    
+
+	void CleanupFoliage();
+
+	std::vector<ActorPtr> mTrees;
+
 public:
     
 	Planet(class Game& game);
+	virtual ~Planet();
 
 	void SetIcoIterations(size_t iterations, int perlinSeed);
-    void addFoliage();
+	void addFoliage(const std::vector<Vertex>& verts);
 
 };
 

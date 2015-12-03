@@ -44,6 +44,11 @@ Planet::Planet(Game& game) : Super(game)
 	SetScale(200.f);
 }
 
+Planet::~Planet()
+{
+	CleanupFoliage();
+}
+
 void Planet::Deform(std::vector<Vertex>& verts)
 {
     // deform based on perlin noise
@@ -68,6 +73,17 @@ void Planet::Deform(std::vector<Vertex>& verts)
 		Vector3 finalColor = (1.0f - colorFrac) * gColor[lowerIndex] + colorFrac * gColor[lowerIndex + 1];
 		v.mColor = finalColor;
     }
+
+	addFoliage(verts);
+}
+
+void Planet::CleanupFoliage()
+{
+	for (auto tree : mTrees)
+	{
+		tree->SetIsAlive(false);
+	}
+	mTrees.clear();
 }
 
 void Planet::SetIcoIterations(size_t iterations, int perlinSeed)
@@ -76,6 +92,8 @@ void Planet::SetIcoIterations(size_t iterations, int perlinSeed)
 
 	mCurrentIterations = iterations;
 	mPerlinSeed = perlinSeed;
+
+	CleanupFoliage();
 
 	// Create the ocean / water level mesh
 	auto meshPtr = ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(iterations));
@@ -122,25 +140,36 @@ void Planet::SetIcoIterations(size_t iterations, int perlinSeed)
 
 
 
-void Planet::addFoliage() {
+void Planet::addFoliage(const std::vector<Vertex>& verts) {
     auto meshPtr = mMesh->GetMesh();
-    std::vector<Vertex> verts = meshPtr->GetVertexArray()->GetVerts();
     mTree = Tree::Spawn( mGame );
     
     for(int i = 0; i < verts.size(); i++) {
         Vector3 pos =  verts[i].mPos * GetScale() + GetPosition();
         
-        Vector3 normal = verts[i].mPos;
-        normal.Normalize();
-        Vector3 up(0.0f,0.0f,1.0f);
-        Vector3 axis = Cross(verts[i].mPos, up);
-        axis.Normalize();
-        float deltaAngle = Dot(verts[i].mPos, up);
-        Quaternion deltaRotation = Quaternion( axis,  deltaAngle );
-       
+		Vector3 normal = verts[i].mNormal;
+		static const Vector3 up = Vector3::UnitZ;
+
+		float dot = Dot(normal, up);
+		Quaternion deltaRotation;
+
+		if (Math::Abs(dot) > 0.9995f)
+		{
+			deltaRotation = Quaternion::Identity;
+		}
+		else
+		{
+			float deltaAngle = Math::Acos(dot);
+
+			Vector3 axis = Cross(up, normal);
+			axis.Normalize();
+
+			deltaRotation = Quaternion( axis,  deltaAngle );
+		}
+
         float len = pos.Length();
        // if(len > 800.0f) {
-            mTree->buildEverGreen(2,pos, deltaRotation);
+		mTrees.push_back(mTree->buildEverGreen(2,pos, deltaRotation));
        // }
 
     }
