@@ -137,7 +137,7 @@ void Tree::buildTree(int lvl, Vector3 pos){
 
 ActorPtr Tree::buildEverGreen(int lvl, Vector3 pos, Quaternion deltaRotation) {
     
-    auto actor = Actor::Spawn(mGame);
+	auto actor = Actor::Spawn(Game::Get());
     auto meshComp = MeshComponent::Create(*(actor.get()));
     auto meshPtr =  ProceduralMesh::StaticCreate(std::make_shared<Foliage>(1));
     meshComp->SetMesh(meshPtr);

@@ -141,9 +141,6 @@ void Planet::SetIcoIterations(size_t iterations, int perlinSeed)
 
 
 void Planet::addFoliage(const std::vector<Vertex>& verts) {
-    auto meshPtr = mMesh->GetMesh();
-    mTree = Tree::Spawn( mGame );
-    
     for(int i = 0; i < verts.size(); i++) {
         Vector3 pos =  verts[i].mPos * GetScale() + GetPosition();
         
@@ -169,7 +166,7 @@ void Planet::addFoliage(const std::vector<Vertex>& verts) {
 
         float len = pos.Length();
        // if(len > 800.0f) {
-		mTrees.push_back(mTree->buildEverGreen(2,pos, deltaRotation));
+		mTrees.push_back(Tree::buildEverGreen(2,pos, deltaRotation));
        // }
 
     }
