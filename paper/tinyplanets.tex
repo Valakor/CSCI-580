@@ -51,26 +51,26 @@ Our material system implements basic Phong shading in a single vertex and fragme
 
 \section{\uppercase{IcoSpheres}}
 \label{sec:icosphere}
-\noindent An icosphere is one of two of the most common ways of rendering spheres in computer graphics applications, the other being the UV sphere. An icosphere starts by taking a 20-sided polyhedron (icosahedron)  and recursively subdividing the faces to add detail. This method of generation causes the sphere's vertexes to be evenly distributed along the surface, which is a desirable trait for our use case as it lends itself better for deformation than UV spheres \cite{pnoise}. Figure \ref{fig_isa} illustrates the basic idea behind this algorithm. The number of iterations can be changed to produce more or less detailed icospheres for planetary generation.
+\noindent An icosphere is one of two of the most common ways of rendering spheres in computer graphics applications, the other being the UV sphere. An icosphere starts by taking a 20-sided polyhedron (icosahedron)  and recursively subdividing the faces to add detail. This method of generation causes the sphere's vertices to be evenly distributed along the surface, which is a desirable trait for our use case as it lends itself better for deformation than UV spheres \cite{pnoise}. Figure \ref{fig_isa} illustrates the basic idea behind this algorithm. The number of iterations can be changed to produce more or less detailed icospheres for planetary generation.
 In the general algorithm, generated vertices are cached in order to avoid duplicates, reducing generation time, and allowing for vertex indexing on the GPU. Furthermore, normals are trivial to produce: because we generate a unit sphere, normals have the same \textit{x}, \textit{y}, and \textit{z} components of the vertices themselves. This method - when combined with Phong shading - produces incredibly smooth-shaded spheres after only a few iterations; however, our stylistic goal involves flat shading, so we modified the algorithm to duplicate vertices and calculate surface normals per-triangle. Figure \ref{fig_isn} shows the difference in the two techniques. Interestingly, the iterative nature of generating an icosphere lends itself well to Level of Detail (LOD) systems, where lower iteration counts can be used for distant icospheres, though this concept was not explored in our project.
 
 \begin{figure}
 \includegraphics[scale=0.24]{./images/icospheres/icosphereslod.png}
-\caption{Icosphere after different levels of iteration produced by our implementation. As mentioned it is clear that this system lends itself nicely for LODs systems}
+\caption{Icosphere after different levels of iteration produced by our implementation. As mentioned, it is clear that this system lends itself nicely for LODs systems}
 \label{fig_isa}
 \end{figure}
 
 \begin{figure}
 \includegraphics[scale=0.24]{./images/icospheres/icospheresnormals.png}
-\caption{Left, the unmodified algorithm after 2 iterations that produces indexed meshes and interpolates vertex normals. Right, our modified algorithm that produces surface normals.}
+\caption{Left, the unmodified algorithm after 2 iterations that produces indexed meshes and interpolates vertex normals. Right, our modified algorithm that produces surface normals}
 \label{fig_isn}
 \end{figure}
 
 \section{\uppercase{Perlin Noise}}
 \label{sec:pnoise}
-\noindent Ken Perlin's algorithm for creating pseudo-random noise is a staple in any application trying to replicate natural occurring patterns. The algorithm is fairly simple and consists of three steps: defining an n-dimensional grid, computing the dot value of distance-gradient vectors and interpolating this values.
+\noindent Ken Perlin's algorithm for creating pseudo-random noise is a staple in any application trying to replicate naturally occurring patterns. The algorithm is fairly simple and consists of three steps: defining an n-dimensional grid, computing the dot value of distance-gradient vectors, and interpolating these values.
 
-The process to create the noise is then repeated and the generation function is scaled, we call the scaled results octaves. Stacking these octaves gives the irregularity and details on different heights usually seen only naturally occurring phenomena. 
+The process to create the noise is then repeated and the generation function is scaled; these scaled results are called octaves. Stacking these octaves gives the generated noise irregularity and details on different heights usually seen only naturally occurring phenomena.
 
 \begin{figure}
 \centering
@@ -81,14 +81,14 @@ The process to create the noise is then repeated and the generation function is 
 
 \subsection{Multi Fractal Perlin Noise}
 \label{sec:mfpnois}
-Classical Perlin noise is homogeneous and isotropic, this plays against the rationale to use Perlin noise: creating natural occurring patterns.  As defined in \cite{ondrej07} a \textit{multifractal} is a heterogeneous fractal, this is achieved by parameterizing the dimension of the fractal function with another attribute, such as the height value of the terrain, this makes it so values closer to 0 (sea level) are smoothed out, whereas high values higher octaves have a bigger effect causing jags.  The algorithm implementation is based on \cite{pnoise} and [REF].
+Classical Perlin noise is homogeneous and isotropic, playing against the rationale to use Perlin noise to create naturally occurring patterns.  As defined in \cite{ondrej07}, a \textit{multifractal} is a heterogeneous fractal, this is achieved by parameterizing the dimension of the fractal function with another attribute, such as the height value of the terrain. This makes it so values closer to 0 (sea level) are smoothed out, whereas higher values in higher octaves have a bigger effect causing jags.  The algorithm implementation is based on \cite{pnoise} and \cite{ondrej07}.
 
 \section{\uppercase{Terrain Generation}}
 \label{sec:tgeneration}
 
-\noindent Using an instance of the multi-fractal Perlin noise, we deform vertexes as they are being created by the icosphere algorithm to create geographic-looking features. We use a \textit{ridged} version of the algorithm to produce more interesting patterns as described in [REF]. The terrain generation code can further parameterize the deformation by scaling the result or 
+\noindent Using an instance of the multi-fractal Perlin noise, we deform vertexes as they are being created by the icosphere algorithm to create geographic-looking features. We use a \textit{ridged} version of the algorithm to produce more interesting patterns as described in \cite{ondrej07}. The terrain generation code can further parameterize the deformation by scaling the result or 
 
-The deformation is the result of displacing the vertex by a value up to a maximum deformation in the direction of the vertex normal vector, which could be interpreted as 'up' in the terrains frame of reference, thus creating a relief.
+The deformation is the result of displacing the vertex by a value up to a maximum deformation in the direction of the vertex normal vector, which could be interpreted as 'up' in the terrain's frame of reference, thus creating a relief.
 
 Planetary terrain is colored per-vertex using a weighted color look-up table where the index is calculated using the vertex's 'altitude' (simply the magnitude of the vertex's position). The vertex colors are interpolated by the GPU and then applied per-pixel rather than using a texture.
 
@@ -108,10 +108,10 @@ Planetary terrain is colored per-vertex using a weighted color look-up table whe
 
 \section{\uppercase{Foliage}}
 \label{sec:fol}
-\noindent When planning the design of our foliage system, we initially look at using an L-System for the generation of trees, however due to our low polygon style, the detail that an L-System provides  was not needed, however we did use similar concepts for creating the tree branching. 
+\noindent When planning the design of our foliage system, we initially looked at using an L-System for the generation of trees; however, the detail that an L-System provides was not needed due to our low-polygon stylized appearance. We did use similar concepts, however, when creating the tree branching. 
 For the regular tree types there are three options or 'levels' that we can pass in as a parameter allowing for different tree variations. Figure \ref{fig_all_trees} and Figure \ref{fig_all_trees} show examples of the levels of branching, although our scene does not use Figure \ref{fig_all_trees}, this is just an example of how the basic concept of an L-System was integrated into our project.
 
-Different types of tree assets were generated with similar algorithms, inclusive reusing some of the icosphere generation algorithm to create geometry. Figure \ref{fig_all_trees} shows examples of different trees generated by our system.
+Different types of tree assets were generated with similar algorithms, including reusing some of the icosphere generation algorithm to create geometry. Figure \ref{fig_all_trees} shows examples of different trees generated by our system.
 
 \begin{figure}
 \centering
