@@ -135,22 +135,24 @@ void Tree::buildTree(int lvl, Vector3 pos){
 }
 
 
-void Tree::buildEverGreen(int lvl, Vector3 pos) {
+void Tree::buildEverGreen(int lvl, Vector3 pos, Quaternion deltaRotation) {
     
     auto actor = Actor::Spawn(mGame);
     auto meshComp = MeshComponent::Create(*(actor.get()));
     auto meshPtr =  ProceduralMesh::StaticCreate(std::make_shared<Foliage>(1));
     meshComp->SetMesh(meshPtr);
     actor->SetPosition(Vector3(pos.x, pos.y, pos.z));
-    actor->SetScale(20.0f);
+    actor->SetScale(10.0f);
+    actor->SetRotation(deltaRotation);
     
     
     auto actor2 = Actor::Spawn(mGame);
     auto meshComp2 = MeshComponent::Create(*(actor2.get()));
     auto meshPtr2 =  ProceduralMesh::StaticCreate(std::make_shared<Foliage>(2));
     meshComp2->SetMesh(meshPtr2);
-    actor2->SetPosition(Vector3(pos.x, pos.y, pos.z + 20.0f));
-    actor2->SetScale(10.0f);
+    actor2->SetPosition(Vector3(pos.x, pos.y, pos.z + 10.0f));
+    actor2->SetScale(5.0f);
+    actor2->SetRotation(deltaRotation);
 }
 
 void Tree::buildFluffyTree(int lvl, Vector3 pos) {

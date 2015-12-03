@@ -90,7 +90,7 @@ void Planet::SetIcoIterations(size_t iterations, int perlinSeed)
 		auto shaderInstance = shader->CreateShaderInstance();
 
 		// Set up material defaults for planets
-		shaderInstance->BindDiffuseColor(Vector3(0.27f, 0.6f, 0.94f));
+	    shaderInstance->BindDiffuseColor(Vector3(0.27f, 0.6f, 0.94f));
 		shaderInstance->BindSpecPower(8.0f);
 		// etc...
 
@@ -117,5 +117,33 @@ void Planet::SetIcoIterations(size_t iterations, int perlinSeed)
 		// Set new shader instance
 		meshPtr->SetShader(shaderInstance);
 	}
+    
+}
+
+
+
+void Planet::addFoliage() {
+    auto meshPtr = mMesh->GetMesh();
+    std::vector<Vertex> verts = meshPtr->GetVertexArray()->GetVerts();
+    mTree = Tree::Spawn( mGame );
+    
+    for(int i = 0; i < verts.size(); i++) {
+        Vector3 pos =  verts[i].mPos * GetScale() + GetPosition();
+        
+        Vector3 normal = verts[i].mPos;
+        normal.Normalize();
+        Vector3 up(0.0f,0.0f,1.0f);
+        Vector3 axis = Cross(verts[i].mPos, up);
+        axis.Normalize();
+        float deltaAngle = Dot(verts[i].mPos, up);
+        Quaternion deltaRotation = Quaternion( axis,  deltaAngle );
+       
+        float len = pos.Length();
+       // if(len > 800.0f) {
+            mTree->buildEverGreen(2,pos, deltaRotation);
+       // }
+
+    }
+    
 }
 

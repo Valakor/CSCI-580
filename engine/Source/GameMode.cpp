@@ -41,10 +41,10 @@ void GameMode::BeginPlay()
 	mShip = Ship::Spawn( mGame );
 
     
-    addPlanetRing();
+   // addPlanetRing();
     
     
-    mTree = Tree::Spawn( mGame );
+ //   mTree = Tree::Spawn( mGame );
   //  mTree->buildEverGreen(2, Vector3(0.0f, 0.0f, 0.0f));
     //mTree->buildGrass(Vector3(x * 8.0f, y * 8.0f, 0.0f));
   //  mTree->buildGrass(Vector3(0.0f, 0.0f, 0.0f));
@@ -54,9 +54,9 @@ void GameMode::BeginPlay()
 
 
 	// Create a couple planets
-	static const size_t NUM_PLANETS = 4;
+	static const size_t NUM_PLANETS = 1;
 	static const float RADIUS = 700.0f;
-	float angle = 0.0f;
+	float angle = 90.0f;
 	for (int i = 0; i < NUM_PLANETS; ++i)
 	{
 		auto planet = Planet::Spawn(mGame);
@@ -64,9 +64,11 @@ void GameMode::BeginPlay()
 		mPlanets.push_back(planet);
 
 		angle += Math::TwoPi / NUM_PLANETS;
+
 	}
 
-	RegenerateWorld(0);
+	RegenerateWorld(3);
+    
 
 	// Add generation input bindings
 	mGame.GetInput().BindAction("Regenerate0", InputEvent::IE_Pressed, this, &GameMode::RegenerateLevel0);
@@ -85,7 +87,10 @@ void GameMode::RegenerateWorld(int icoIterations)
 	for (size_t i = 0; i < mPlanets.size(); ++i)
 	{
 		mPlanets[i]->SetIcoIterations(icoIterations, i);
-	}
+        
+        mPlanets[i]->addFoliage();
+    }
+    
 
 }
 

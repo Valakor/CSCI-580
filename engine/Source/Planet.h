@@ -10,6 +10,7 @@
 
 #include "Actor.h"
 #include "MeshComponent.h"
+#include "Tree.h"
 
 class Planet : public Actor
 {
@@ -17,6 +18,7 @@ class Planet : public Actor
     
     MeshComponentPtr mMesh;
 	size_t mCurrentIterations;
+    TreePtr mTree;
 
 	MeshComponentPtr mWaterMesh;
 
@@ -29,6 +31,8 @@ public:
 	Planet(class Game& game);
 
 	void SetIcoIterations(size_t iterations, int perlinSeed);
+    void addFoliage();
+
 };
 
 DECL_PTR(Planet);
