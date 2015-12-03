@@ -10,25 +10,10 @@
 
 #include "Actor.h"
 #include "MeshComponent.h"
-#include "Tree.h"
 
 class Planet : public Actor
 {
 	DECL_ACTOR(Planet, Actor);
-    
-    MeshComponentPtr mMesh;
-	size_t mCurrentIterations;
-    TreePtr mTree;
-
-	MeshComponentPtr mWaterMesh;
-
-	int mPerlinSeed;
-
-	void Deform(std::vector<Vertex>& verts);
-
-	void CleanupFoliage();
-
-	std::vector<ActorPtr> mTrees;
 
 public:
     
@@ -36,7 +21,17 @@ public:
 	virtual ~Planet();
 
 	void SetIcoIterations(size_t iterations, int perlinSeed);
-	void addFoliage(const std::vector<Vertex>& verts);
+
+protected:
+
+	MeshComponentPtr mMesh;
+
+	size_t mCurrentIterations;
+	int mPerlinSeed;
+
+	virtual void Generate() { }
+
+	virtual void Cleanup() { }
 
 };
 

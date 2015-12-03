@@ -5,6 +5,7 @@
 
 #include <cmath>
 #include <memory.h>
+#include <random>
 
 namespace Math
 {
@@ -90,6 +91,11 @@ namespace Math
 	inline float Sqrt(float value)
 	{
 		return sqrtf(value);
+	}
+
+	inline float Randf()
+	{
+		return rand() / static_cast<float>(RAND_MAX);
 	}
 }
 

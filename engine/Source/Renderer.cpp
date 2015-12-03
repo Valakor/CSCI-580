@@ -192,8 +192,8 @@ Vector3 Renderer::Unproject( const Vector3& screenPoint ) const
 
 void Renderer::Clear()
 {
+	glClearColor(88.0f / 255.0f, 204.0f / 255.05, 1.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(88.0f/255.0f, 204.0f/255.05, 1.0f, 1.0f);
 }
 
 void Renderer::DrawComponents()

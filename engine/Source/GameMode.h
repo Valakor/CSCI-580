@@ -26,15 +26,12 @@ public:
 private:
 
 	std::vector<PlanetPtr> mPlanets;
-    void addPlanetRing();
 	void RegenerateWorld(int icoIterations);
-
     
     AudioComponentPtr mAudio;
     HUDPtr mHud;
 	ShipPtr mShip;
     TreePtr mTree;
-
 
 	void RegenerateLevel0() { RegenerateWorld(0); }
 	void RegenerateLevel1() { RegenerateWorld(1); }

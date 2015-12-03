@@ -24,14 +24,14 @@ Tree::Tree(Game& game) : Super(game)
 
 }
 
-ActorPtr Tree::buildTree(int lvl, Vector3 pos, Quaternion deltaRotation){
-    
+ActorPtr Tree::buildTree(int lvl, Vector3 pos, Quaternion deltaRotation)
+{
     auto actor = Actor::Spawn(Game::Get());
     auto meshComp = MeshComponent::Create(*(actor.get()));
     auto meshPtr =  ProceduralMesh::StaticCreate(std::make_shared<Foliage>(1));
     meshComp->SetMesh(meshPtr);
     actor->SetPosition(Vector3(pos.x, pos.y, pos.z));
-    actor->SetScale(5.0f);
+    actor->SetScale(0.04f);
     actor->SetRotation(deltaRotation);
     
     
@@ -40,53 +40,48 @@ ActorPtr Tree::buildTree(int lvl, Vector3 pos, Quaternion deltaRotation){
     auto ico_meshPtr =  ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(1, nullptr, "Textures/Tree.png"));
     ico_meshComp->SetMesh(ico_meshPtr);
     ico_actor->SetPosition(Vector3(0.0f, 0.0f, 2.7f));
-    ico_actor->SetScale(1.0f);
     
-    
-    
-    if(lvl > 1) {
-        auto actor2 = Actor::SpawnAttached(*actor);
-        auto meshComp2 = MeshComponent::Create(*(actor2.get()));
-        auto meshPtr2 =  ProceduralMesh::StaticCreate(std::make_shared<Foliage>(1));
-        meshComp2->SetMesh(meshPtr2);
-        actor2->SetScale(0.8f);
-        float deltaAngle = .7f;
-        Vector3 rotationAxis = Vector3(0,1,0);
-        Quaternion deltaRotation2 = Quaternion( rotationAxis, deltaAngle );
-        actor2->SetRotation(deltaRotation2);
-        actor2->SetPosition(Vector3(0.0f, 0.0f, 1.0f));
-        
-        
-        auto ico_actor2 = Actor::SpawnAttached(*actor);
-        auto ico_meshComp2 = MeshComponent::Create(*(ico_actor2.get()));
-        auto ico_meshPtr2 =  ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(1, nullptr, "Textures/Tree.png"));
-        ico_meshComp2->SetMesh(ico_meshPtr2);
-        ico_actor2->SetPosition(Vector3(1.0f, 0.0f , 2.0f));
-        ico_actor2->SetScale(0.5f);
-    }
-    
-    if (lvl > 2) {
-        auto actor2 = Actor::SpawnAttached(*actor);
-        auto meshComp2 = MeshComponent::Create(*(actor2.get()));
-        auto meshPtr2 =  ProceduralMesh::StaticCreate(std::make_shared<Foliage>(1));
-        meshComp2->SetMesh(meshPtr2);
-        actor2->SetScale(0.8f);
-        float deltaAngle = -0.7f;
-        Vector3 rotationAxis = Vector3(0,1,0);
-        Quaternion deltaRotation = Quaternion( rotationAxis, deltaAngle );
-        actor2->SetRotation(deltaRotation);
-        actor2->SetPosition(Vector3(0.0f, 0.0f, 1.0f));
-        
-         auto ico_actor3 = Actor::SpawnAttached(*actor);
-         auto ico_meshComp3= MeshComponent::Create(*(ico_actor3.get()));
-         auto ico_meshPtr3 =  ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(1, nullptr, "Textures/Tree.png"));
-         ico_meshComp3->SetMesh(ico_meshPtr3);
-         ico_actor3->SetPosition(Vector3(-1.0f, 0.0f ,  2.0f));
-         ico_actor3->SetScale(0.5f);
-        
+    if(lvl > 1)
+	{
+		auto actor2 = Actor::SpawnAttached(*actor);
+		auto meshComp2 = MeshComponent::Create(*(actor2.get()));
+		auto meshPtr2 =  ProceduralMesh::StaticCreate(std::make_shared<Foliage>(1));
+		meshComp2->SetMesh(meshPtr2);
+		actor2->SetScale(0.8f);
+		float deltaAngle = .7f;
+		Vector3 rotationAxis = Vector3(0,1,0);
+		Quaternion deltaRotation2 = Quaternion( rotationAxis, deltaAngle );
+		actor2->SetRotation(deltaRotation2);
+		actor2->SetPosition(Vector3(0.0f, 0.0f, 1.0f));
 
+		auto ico_actor2 = Actor::SpawnAttached(*actor);
+		auto ico_meshComp2 = MeshComponent::Create(*(ico_actor2.get()));
+		auto ico_meshPtr2 =  ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(1, nullptr, "Textures/Tree.png"));
+		ico_meshComp2->SetMesh(ico_meshPtr2);
+		ico_actor2->SetPosition(Vector3(1.0f, 0.0f , 2.0f));
+		ico_actor2->SetScale(0.5f);
     }
     
+	if (lvl > 2)
+	{
+		auto actor2 = Actor::SpawnAttached(*actor);
+		auto meshComp2 = MeshComponent::Create(*(actor2.get()));
+		auto meshPtr2 =  ProceduralMesh::StaticCreate(std::make_shared<Foliage>(1));
+		meshComp2->SetMesh(meshPtr2);
+		actor2->SetScale(0.8f);
+		float deltaAngle = -0.7f;
+		Vector3 rotationAxis = Vector3(0,1,0);
+		Quaternion deltaRotation = Quaternion( rotationAxis, deltaAngle );
+		actor2->SetRotation(deltaRotation);
+		actor2->SetPosition(Vector3(0.0f, 0.0f, 1.0f));
+
+		auto ico_actor3 = Actor::SpawnAttached(*actor);
+		auto ico_meshComp3= MeshComponent::Create(*(ico_actor3.get()));
+		auto ico_meshPtr3 =  ProceduralMesh::StaticCreate(std::make_shared<IcoGenerator>(1, nullptr, "Textures/Tree.png"));
+		ico_meshComp3->SetMesh(ico_meshPtr3);
+		ico_actor3->SetPosition(Vector3(-1.0f, 0.0f ,  2.0f));
+		ico_actor3->SetScale(0.5f);
+	}
     
     return actor;
 }
@@ -98,8 +93,8 @@ ActorPtr Tree::buildEverGreen(int lvl, Vector3 pos, Quaternion deltaRotation) {
     auto meshComp = MeshComponent::Create(*(actor.get()));
     auto meshPtr =  ProceduralMesh::StaticCreate(std::make_shared<Foliage>(1));
     meshComp->SetMesh(meshPtr);
-    actor->SetPosition(Vector3(pos.x, pos.y, pos.z));
-	actor->SetScale(3.0f);
+    actor->SetPosition(pos);
+	actor->SetScale(0.017f);
     actor->SetRotation(deltaRotation);
 
 	auto actor2 = Actor::SpawnAttached(*actor);
@@ -150,7 +145,7 @@ ActorPtr Tree::buildGrass(Vector3 pos, Quaternion deltaRotation) {
     meshComp->SetMesh(meshPtr);
     actor->SetPosition(Vector3(pos.x, pos.y, pos.z));
     actor->SetRotation(deltaRotation);
-    actor->SetScale(0.4f);
+    actor->SetScale(0.0015f);
     return actor;
 }
 
