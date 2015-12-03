@@ -46,6 +46,8 @@
 		D14A820A1B6EB7D50084E3FD /* Ship.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D14A82061B6EB7D50084E3FD /* Ship.cpp */; };
 		D14A820D1B6EB85D0084E3FD /* AudioComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D14A820B1B6EB85D0084E3FD /* AudioComponent.cpp */; };
 		D14A82101B6ECD890084E3FD /* InputComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D14A820E1B6ECD890084E3FD /* InputComponent.cpp */; };
+		D14BC8F51C10D5FF006D0182 /* PlanetRinged.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D14BC8F31C10D5FF006D0182 /* PlanetRinged.cpp */; };
+		D14BC8F61C10D5FF006D0182 /* PlanetTerra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D14BC8F41C10D5FF006D0182 /* PlanetTerra.cpp */; };
 		D1995C541C0C50EC00CA8B82 /* Planet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1995C531C0C50EC00CA8B82 /* Planet.cpp */; };
 		D19C8ECA1B6EF72400129DC6 /* MeshComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D19C8EC81B6EF72400129DC6 /* MeshComponent.cpp */; };
 		D1E0CC721BEE98E1004A995A /* CameraComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1E0CC6B1BEE98E1004A995A /* CameraComponent.cpp */; };
@@ -139,6 +141,10 @@
 		D14A820C1B6EB85D0084E3FD /* AudioComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioComponent.h; sourceTree = "<group>"; };
 		D14A820E1B6ECD890084E3FD /* InputComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputComponent.cpp; sourceTree = "<group>"; };
 		D14A820F1B6ECD890084E3FD /* InputComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InputComponent.h; sourceTree = "<group>"; };
+		D14BC8F31C10D5FF006D0182 /* PlanetRinged.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlanetRinged.cpp; sourceTree = "<group>"; };
+		D14BC8F41C10D5FF006D0182 /* PlanetTerra.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PlanetTerra.cpp; sourceTree = "<group>"; };
+		D14BC8F71C10D608006D0182 /* PlanetRinged.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlanetRinged.h; sourceTree = "<group>"; };
+		D14BC8F81C10D608006D0182 /* PlanetTerra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlanetTerra.h; sourceTree = "<group>"; };
 		D1995C531C0C50EC00CA8B82 /* Planet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Planet.cpp; sourceTree = "<group>"; };
 		D1995C551C0C50FC00CA8B82 /* Planet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Planet.h; sourceTree = "<group>"; };
 		D19C8EC81B6EF72400129DC6 /* MeshComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeshComponent.cpp; sourceTree = "<group>"; };
@@ -236,6 +242,8 @@
 				D11532471C043A27002B659A /* PerlinNoise.h */,
 				92E46E581B634F950035CD21 /* PhysWorld.h */,
 				D1995C551C0C50FC00CA8B82 /* Planet.h */,
+				D14BC8F71C10D608006D0182 /* PlanetRinged.h */,
+				D14BC8F81C10D608006D0182 /* PlanetTerra.h */,
 				D11087711C03E13800EAB959 /* ProceduralMesh.h */,
 				D11532481C043A27002B659A /* ProceduralTexture.h */,
 				92E46E591B634F950035CD21 /* Random.h */,
@@ -289,6 +297,8 @@
 				D11532431C043A18002B659A /* PerlinNoise.cpp */,
 				92E46E711B634FCA0035CD21 /* PhysWorld.cpp */,
 				D1995C531C0C50EC00CA8B82 /* Planet.cpp */,
+				D14BC8F31C10D5FF006D0182 /* PlanetRinged.cpp */,
+				D14BC8F41C10D5FF006D0182 /* PlanetTerra.cpp */,
 				D110876E1C03E12D00EAB959 /* ProceduralMesh.cpp */,
 				D11532441C043A18002B659A /* ProceduralTexture.cpp */,
 				92E46E721B634FCA0035CD21 /* Random.cpp */,
@@ -390,8 +400,10 @@
 				92E46E801B634FCA0035CD21 /* Component.cpp in Sources */,
 				D11532451C043A18002B659A /* PerlinNoise.cpp in Sources */,
 				D11427631C100DEB00512A2B /* Tree.cpp in Sources */,
+				D14BC8F61C10D5FF006D0182 /* PlanetTerra.cpp in Sources */,
 				D14A82081B6EB7D50084E3FD /* Asteroid.cpp in Sources */,
 				92E46E8E1B634FCA0035CD21 /* SphereCollision.cpp in Sources */,
+				D14BC8F51C10D5FF006D0182 /* PlanetRinged.cpp in Sources */,
 				92E46E871B634FCA0035CD21 /* MoveComponent.cpp in Sources */,
 				92E46E891B634FCA0035CD21 /* PhysWorld.cpp in Sources */,
 				92E46E881B634FCA0035CD21 /* Object.cpp in Sources */,
